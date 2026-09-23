@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PPDK.CH — Varian D</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* ARAH E "BUKU LOG" — fail pejabat yang dihormati. Kertas krim, grid graf halus,
+   medan borang rasmi, cop dakwat, tab indeks di tepi lembaran.
+   Tandatangan: tanda kiraan (tally) 21 sekolah + lejar log bercop. */
+:root{
+  --desk:#E9E4D8; --paper:#FBF9F3; --paper-2:#F3EFE4; --grid:rgba(36,59,122,.055); --grid-2:rgba(36,59,122,.10);
+  --ink:#1B2440; --ink-2:#434B63; --muted:#7A7F8E; --rule:#DCD6C8; --rule-2:#C9C1AF;
+  --stamp:#2E4A9E; --isd:#DC2626;
+  --z1:#2563EB; --z2:#16A34A; --z3:#F59E0B; --z4:#8B5CF6; --z5:#EC4899; --z6:#06B6D4; --z7:#D97706; --z8:#475569;
+  --display:"Archivo",system-ui,sans-serif; --sans:"IBM Plex Sans",system-ui,sans-serif; --mono:"IBM Plex Mono",ui-monospace,monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--desk);color:var(--ink);font:15px/1.5 var(--sans);-webkit-font-smoothing:antialiased}
+a{color:inherit;text-decoration:none}
+button{font:inherit;cursor:pointer;background:none;border:0;color:inherit}
+:focus-visible{outline:2px solid var(--stamp);outline-offset:2px}
+.mono{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase}
+svg.i{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;flex:none}
+
+/* ---------- MEJA + LEMBARAN + TAB ---------- */
+.desk{max-width:1480px;margin:0 auto;padding:32px 96px 48px 40px;position:relative}
+.binder{position:relative;display:grid;grid-template-columns:1fr}
+.sheet{position:relative;background:var(--paper);border:1px solid var(--rule-2);box-shadow:0 1px 0 var(--rule-2),6px 6px 0 -1px var(--paper-2),6px 6px 0 0 var(--rule-2);
+  background-image:linear-gradient(var(--grid-2) 1px,transparent 1px),linear-gradient(90deg,var(--grid-2) 1px,transparent 1px),linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);
+  background-size:40px 40px,40px 40px,8px 8px,8px 8px;background-position:-1px -1px}
+.holes{position:absolute;left:18px;top:0;bottom:0;display:flex;flex-direction:column;justify-content:space-around;pointer-events:none}
+.holes i{width:14px;height:14px;border-radius:50%;background:var(--desk);box-shadow:inset 1px 1px 2px rgba(0,0,0,.18)}
+.inner{padding:34px 44px 40px 64px}
+.tabs{position:absolute;right:-56px;top:28px;display:flex;flex-direction:column;gap:6px;z-index:2}
+.tabs a{display:flex;align-items:center;width:56px;height:52px;padding-left:18px;background:var(--paper-2);border:1px solid var(--rule-2);border-left:0;color:var(--ink-2);position:relative;transition:background .15s,transform .2s}
+.tabs a span{position:absolute;right:calc(100% + 8px);top:50%;background:var(--ink);color:var(--paper);padding:8px 10px;font:600 12px/1 var(--sans);white-space:nowrap;opacity:0;transform:translate(6px,-50%);pointer-events:none;transition:opacity .15s,transform .15s}
+.tabs a:hover{background:#fff;transform:translateX(4px)}
+.tabs a:hover span,.tabs a:focus-visible span{opacity:1;transform:translate(0,-50%)}
+.tabs a.on{background:var(--paper);color:var(--stamp);margin-left:-1px;width:62px;box-shadow:inset 3px 0 0 var(--stamp)}
+.tabs .sep{height:10px}
+
+/* ---------- KEPALA BORANG ---------- */
+.formhead{display:grid;grid-template-columns:auto 1fr auto;gap:24px;align-items:end;padding-bottom:18px;border-bottom:2px solid var(--ink)}
+.crest{width:56px;height:56px;border:2px solid var(--ink);display:grid;place-items:center;font:900 13px/1 var(--display);font-stretch:112%;text-align:center;letter-spacing:-.01em}
+.formhead h1{font:800 30px/1 var(--display);font-stretch:108%;letter-spacing:-.015em;text-transform:uppercase}
+.formhead .sub{margin-top:6px;color:var(--muted)}
+.fields{display:flex;gap:0;border:1px solid var(--ink)}
+.field{padding:6px 12px;min-width:120px}
+.field + .field{border-left:1px solid var(--ink)}
+.field label{display:block;font:600 9px/1 var(--mono);letter-spacing:.1em;color:var(--muted);text-transform:uppercase}
+.field b{display:block;margin-top:4px;font:500 13px/1.2 var(--mono)}
+.simtag{display:inline-flex;align-items:center;gap:6px;margin-top:6px;color:var(--muted)}
+.simtag i{width:7px;height:7px;background:var(--z3)}
+
+/* ---------- SEKSYEN 1: KIRAAN ---------- */
+.row1{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:0;margin-top:28px;border:1px solid var(--ink);background:rgba(251,249,243,.85)}
+.tallybox{padding:24px 28px;border-right:1px solid var(--ink);position:relative}
+.lbl{display:flex;align-items:center;gap:8px;font:600 10px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.lbl b{color:var(--ink);font-weight:600}
+.count{display:flex;align-items:flex-end;gap:10px;margin-top:14px}
+.count .n{font:800 112px/.8 var(--display);font-stretch:72%;letter-spacing:-.03em}
+.count .of{font:400 38px/1 var(--display);font-stretch:72%;color:var(--muted);padding-bottom:2px}
+.count p{margin-left:14px;padding-bottom:4px;font-size:15px;color:var(--ink-2);max-width:18ch;line-height:1.35}
+#tally{display:block;margin-top:22px;width:100%;max-width:520px;height:auto}
+.tally-cap{display:flex;justify-content:space-between;margin-top:8px;color:var(--muted);max-width:520px}
+.stamp{position:absolute;right:26px;top:22px;transform:rotate(-7deg);border:2.5px solid var(--stamp);color:var(--stamp);padding:6px 10px 5px;font:800 13px/1 var(--display);font-stretch:112%;letter-spacing:.08em;text-transform:uppercase;opacity:.85;
+  box-shadow:inset 0 0 0 2px var(--paper),inset 0 0 0 3.5px var(--stamp);mix-blend-mode:multiply}
+.stamp small{display:block;margin-top:3px;font:600 9px/1 var(--mono);letter-spacing:.1em;text-align:center}
+.cta{display:flex;gap:10px;flex-wrap:wrap;margin-top:24px}
+.btn{display:inline-flex;align-items:center;gap:12px;height:48px;padding:0 18px;font-weight:600;border:1.5px solid var(--ink);transition:background .15s,color .15s}
+.btn:hover .arr{transform:translateX(3px)}
+.btn .arr{transition:transform .2s}
+.btn-ink{background:var(--ink);color:var(--paper)}
+.btn-ink:hover{background:var(--stamp);border-color:var(--stamp)}
+.btn-line{background:var(--paper)}
+.btn-line:hover{background:#fff}
+
+.issues{padding:24px 28px}
+.issues h2{display:flex;justify-content:space-between;align-items:baseline}
+.iss{display:grid;grid-template-columns:40px 1fr auto;gap:14px;align-items:center;padding:12px 0;border-bottom:1px dashed var(--rule-2)}
+.iss:last-of-type{border-bottom:0}
+.iss .ic{width:40px;height:40px;border:1.5px solid var(--ink);display:grid;place-items:center;background:var(--paper)}
+.iss .ic svg{width:20px;height:20px}
+.iss b{display:block;font-size:14.5px}
+.meter{margin-top:6px;height:6px;background:var(--paper-2);border:1px solid var(--rule-2);position:relative}
+.meter span{position:absolute;inset:-1px auto -1px -1px;background:var(--ink);width:var(--w)}
+.iss .v{text-align:right;font:700 26px/1 var(--display);font-stretch:80%}
+.iss .v small{display:block;font:500 10px/1 var(--mono);color:var(--muted);margin-top:3px;letter-spacing:.06em}
+.iss.top .ic{background:var(--ink);color:var(--paper)}
+.iss.top .meter span{background:var(--stamp)}
+
+/* ---------- JALUR ANGKA ---------- */
+.figs{display:grid;grid-template-columns:repeat(4,1fr);margin-top:18px;border:1px solid var(--ink);background:rgba(251,249,243,.85)}
+.fig{display:flex;gap:14px;align-items:center;padding:16px 20px}
+.fig + .fig{border-left:1px solid var(--ink)}
+.fig svg.i{width:22px;height:22px;color:var(--stamp)}
+.fig b{display:block;font:800 30px/1 var(--display);font-stretch:78%}
+.fig span{color:var(--muted)}
+.fig .isd{color:#fff}
+.isd{font:700 10px/1 var(--sans);letter-spacing:.04em;color:#fff;background:var(--isd);padding:4px 6px;vertical-align:middle;margin-left:6px}
+
+/* ---------- LEJAR LOG ---------- */
+.row2{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(0,1fr);gap:28px;margin-top:34px}
+.sec-h{display:flex;align-items:baseline;gap:12px;padding-bottom:10px;border-bottom:2px solid var(--ink)}
+.sec-h .no{font:600 11px/1 var(--mono);color:var(--stamp)}
+.sec-h h2{font:800 20px/1 var(--display);font-stretch:108%;text-transform:uppercase;letter-spacing:-.005em}
+.sec-h a{margin-left:auto;font-size:12.5px;font-weight:600;border-bottom:1.5px solid var(--ink)}
+table{width:100%;border-collapse:collapse;background:rgba(251,249,243,.85)}
+th{text-align:left;font:600 9.5px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--muted);padding:10px 10px;border-bottom:1px solid var(--ink)}
+td{padding:14px 10px;border-bottom:1px solid var(--rule);vertical-align:top}
+tr:hover td{background:#fff}
+td.d{font:700 15px/1.1 var(--mono);white-space:nowrap}
+td.d small{display:block;font-size:10px;color:var(--muted);font-weight:500;margin-top:2px}
+td h3{font-size:14px;font-weight:700;text-transform:uppercase;letter-spacing:.01em}
+td p{font-size:13px;color:var(--ink-2);margin-top:3px;max-width:48ch}
+.cat{display:inline-flex;align-items:center;gap:6px;font:500 11px/1 var(--mono);letter-spacing:.04em;color:var(--ink-2);white-space:nowrap}
+.cat svg.i{width:15px;height:15px}
+.mini-stamp{display:inline-block;transform:rotate(-4deg);border:1.5px solid var(--stamp);color:var(--stamp);padding:3px 6px;font:700 9.5px/1 var(--mono);letter-spacing:.1em;box-shadow:inset 0 0 0 1.5px var(--paper),inset 0 0 0 2.5px var(--stamp)}
+.zb{display:inline-flex;align-items:center;height:22px;padding:0 7px;font:700 10.5px/1 var(--sans);letter-spacing:.04em;color:#fff;background:var(--c);white-space:nowrap}
+
+.zrow{display:grid;grid-template-columns:60px 1fr 52px;gap:12px;align-items:center;padding:10px 0;border-bottom:1px solid var(--rule)}
+.boxes{display:flex;gap:3px;flex-wrap:wrap}
+.boxes i{width:15px;height:15px;border:1.5px solid var(--ink);background:var(--paper);position:relative}
+.boxes i.v{background:var(--c);border-color:var(--c)}
+.boxes i.v::after{content:"";position:absolute;left:4px;top:1px;width:4px;height:8px;border:solid #fff;border-width:0 2px 2px 0;transform:rotate(45deg)}
+.zrow .f{text-align:right;font:600 13px/1 var(--mono)}
+.zrow .f small{display:block;color:var(--muted);font-size:10px;margin-top:3px}
+.note{margin-top:10px;font-size:12.5px;color:var(--muted)}
+
+/* ---------- LAMPIRAN ---------- */
+.att{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:36px}
+.card{position:relative;background:var(--paper);border:1px solid var(--rule-2);padding:26px 18px 18px;display:flex;flex-direction:column;gap:6px;transition:transform .2s ease,box-shadow .2s ease;box-shadow:3px 3px 0 var(--rule-2)}
+.card:hover{transform:translate(-2px,-2px);box-shadow:5px 5px 0 var(--ink)}
+.clip{position:absolute;top:-12px;left:22px;width:16px;height:34px;border:2px solid #8A8F9C;border-radius:8px 8px 8px 8px;border-bottom-color:transparent}
+.card .tag{color:var(--stamp)}
+.card .ic{width:36px;height:36px;display:grid;place-items:center;background:var(--paper-2);border:1px solid var(--rule-2);margin-bottom:6px}
+.card b{font-size:15px}
+.card small{font-size:13px;color:var(--ink-2)}
+.foot{display:flex;justify-content:space-between;margin-top:34px;padding-top:14px;border-top:2px solid var(--ink);color:var(--muted)}
+
+@keyframes draw{to{stroke-dashoffset:0}}
+.stroke{stroke-dasharray:90;stroke-dashoffset:90;animation:draw .28s ease-out forwards}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.stroke{stroke-dashoffset:0}}
+
+/* ---------- RESPONSIF ---------- */
+@media (max-width:1180px){
+  .row1,.row2{grid-template-columns:minmax(0,1fr)}
+  .tallybox{border-right:0;border-bottom:1px solid var(--ink)}
+  .att{grid-template-columns:1fr 1fr}
+  .figs{grid-template-columns:1fr 1fr}
+  .fig:nth-child(3){border-left:0}
+  .fig:nth-child(-n+2){border-bottom:1px solid var(--ink)}
+}
+@media (max-width:860px){
+  .desk{padding:0 0 32px}
+  .tabs{position:sticky;top:0;right:auto;flex-direction:row;overflow-x:auto;gap:0;background:var(--desk);padding:10px 12px 0;scrollbar-width:none}
+  .tabs::-webkit-scrollbar{display:none}
+  .tabs a,.tabs a:hover,.tabs a.on{transform:none;width:auto;height:44px;padding:0 14px;border:1px solid var(--rule-2);border-bottom:0;margin:0 4px 0 0;box-shadow:none;flex:none}
+  .tabs a span{position:static;opacity:1;transform:none;background:none;color:inherit;padding:0 0 0 8px}
+  .tabs a.on{box-shadow:inset 0 3px 0 var(--stamp);background:var(--paper)}
+  .tabs .sep{display:none}
+  .sheet{box-shadow:none;border-left:0;border-right:0}
+  .holes{display:none}
+  .inner{padding:22px 16px 28px}
+  .formhead{grid-template-columns:auto 1fr;gap:14px}
+  .fields{grid-column:1/-1;flex-wrap:wrap}
+  .field{flex:1;min-width:0}
+  .formhead h1{font-size:22px}
+}
+@media (max-width:560px){
+  .tallybox,.issues{padding:20px 16px}
+  .count .n{font-size:88px}
+  .count p{font-size:13.5px;margin-left:6px}
+  .stamp{right:14px;top:16px;font-size:11px}
+  .btn{width:100%;justify-content:space-between}
+  .figs{grid-template-columns:1fr 1fr}
+  .fig{padding:14px 12px;gap:10px}
+  .fig b{font-size:26px}
+  thead{display:none}
+  table,tbody,tr,td{display:block;width:100%}
+  tr{display:grid!important;grid-template-columns:56px 1fr auto;padding:12px 0;border-bottom:1px solid var(--rule)}
+  td{border:0;padding:0 6px}
+  td.c1{grid-column:2/-1;grid-row:1}
+  td.z{grid-column:3;grid-row:1;position:absolute;right:0}
+  tr{position:relative}
+  td.k{grid-column:2;padding-top:8px}
+  td.s{grid-column:3;grid-row:2;padding-top:8px}
+  td.c1 h3{padding-right:64px}
+  .att{grid-template-columns:1fr}
+  .foot{flex-direction:column;gap:6px}
+}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-home" viewBox="0 0 24 24"><path d="M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6h-6v6H4a1 1 0 0 1-1-1z"/></symbol>
+  <symbol id="i-form" viewBox="0 0 24 24"><path d="M14 3H6v18h12V7z"/><path d="M14 3v4h4M9 12h6M9 16h6"/></symbol>
+  <symbol id="i-grid" viewBox="0 0 24 24"><path d="M4 4h7v7H4zM13 4h7v7h-7zM4 13h7v7H4zM13 13h7v7h-7z"/></symbol>
+  <symbol id="i-bar" viewBox="0 0 24 24"><path d="M5 20V10M12 20V4M19 20v-7"/></symbol>
+  <symbol id="i-team" viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0M16 4.5a3.5 3.5 0 0 1 0 7M18 14a6 6 0 0 1 3.5 6"/></symbol>
+  <symbol id="i-alert" viewBox="0 0 24 24"><path d="M12 3l10 18H2z"/><path d="M12 10v5M12 18h.01"/></symbol>
+  <symbol id="i-log" viewBox="0 0 24 24"><path d="M5 3h14v18H5z"/><path d="M9 8h6M9 12h6M9 16h3"/></symbol>
+  <symbol id="i-map" viewBox="0 0 24 24"><path d="M9 4L3 6v14l6-2 6 2 6-2V4l-6 2z"/><path d="M9 4v14M15 6v14"/></symbol>
+  <symbol id="i-report" viewBox="0 0 24 24"><path d="M3 4h18v12H3z"/><path d="M8 20h8M12 16v4M7 12l3-3 2 2 4-4"/></symbol>
+  <symbol id="i-qr" viewBox="0 0 24 24"><path d="M4 4h6v6H4zM14 4h6v6h-6zM4 14h6v6H4zM14 14h2v2h-2zM18 18h2v2h-2zM14 18h2v2h-2zM18 14h2v2h-2z"/></symbol>
+  <symbol id="i-lock" viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="10"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></symbol>
+  <symbol id="i-wifi" viewBox="0 0 24 24"><path d="M2 8.5a15 15 0 0 1 20 0M5 12a10 10 0 0 1 14 0M8.5 15.5a5 5 0 0 1 7 0"/><path d="M12 19h.01"/></symbol>
+  <symbol id="i-printer" viewBox="0 0 24 24"><path d="M6 9V3h12v6"/><rect x="3" y="9" width="18" height="8"/><path d="M6 14h12v7H6z"/></symbol>
+  <symbol id="i-laptop" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="11"/><path d="M2 19h20"/></symbol>
+  <symbol id="i-cog" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M4.2 4.2l2.1 2.1M17.7 17.7l2.1 2.1M2 12h3M19 12h3M4.2 19.8l2.1-2.1M17.7 6.3l2.1-2.1"/></symbol>
+  <symbol id="i-wrench" viewBox="0 0 24 24"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.8-3.8a6 6 0 0 1-7.9 7.9l-6.9 6.9a2.1 2.1 0 0 1-3-3l6.9-6.9a6 6 0 0 1 7.9-7.9z"/></symbol>
+  <symbol id="i-school" viewBox="0 0 24 24"><path d="M3 21h18M5 21V10l7-5 7 5v11M9 21v-5h6v5M10 11h4"/></symbol>
+  <symbol id="i-ticket" viewBox="0 0 24 24"><path d="M3 7h18v3a2 2 0 0 0 0 4v3H3v-3a2 2 0 0 0 0-4z"/><path d="M13 7v10" stroke-dasharray="2 2"/></symbol>
+  <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></symbol>
+  <symbol id="i-install" viewBox="0 0 24 24"><rect x="6" y="2" width="12" height="20"/><path d="M12 7v7M9 11l3 3 3-3M10 18h4"/></symbol>
+  <symbol id="i-radar" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><path d="M12 12l6-6"/><circle cx="12" cy="12" r="1"/></symbol>
+  <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></symbol>
+</svg>
+
+<div class="desk">
+  <div class="binder">
+    <nav class="tabs" aria-label="Utama">
+      <a class="on" href="#"><svg class="i"><use href="#i-home"/></svg><span>Home</span></a>
+      <a href="#"><svg class="i"><use href="#i-form"/></svg><span>Borang PTIS</span></a>
+      <a href="#"><svg class="i"><use href="#i-grid"/></svg><span>Dashboard</span></a>
+      <a href="#"><svg class="i"><use href="#i-bar"/></svg><span>Analitik Zon</span></a>
+      <a href="#"><svg class="i"><use href="#i-team"/></svg><span>Ahli JTK</span></a>
+      <a href="#"><svg class="i"><use href="#i-alert"/></svg><span>Isu &amp; Tujuan</span></a>
+      <a href="#"><svg class="i"><use href="#i-log"/></svg><span>Rekod Lawatan</span></a>
+      <a href="#"><svg class="i"><use href="#i-map"/></svg><span>Peta &amp; Radar</span></a>
+      <a href="#"><svg class="i"><use href="#i-report"/></svg><span>Laporan Rasmi</span></a>
+      <a href="#"><svg class="i"><use href="#i-qr"/></svg><span>QR &amp; Short URL</span></a>
+      <div class="sep"></div>
+      <a href="#"><svg class="i"><use href="#i-lock"/></svg><span>Login Admin</span></a>
+    </nav>
+
+    <div class="sheet">
+      <div class="holes" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+      <div class="inner">
+        <header class="formhead">
+          <div class="crest">PPDK<br>.CH</div>
+          <div>
+            <h1>Buku Log Operasi PTIS</h1>
+            <div class="sub mono">Unit ICT · Pejabat Pendidikan Daerah Kuching</div>
+            <div class="simtag mono"><i></i>Pratonton · data simulasi</div>
+          </div>
+          <div class="fields">
+            <div class="field"><label>Bulan</label><b>SEP 2026</b></div>
+            <div class="field"><label>Tarikh</label><b>23.09.2026</b></div>
+            <div class="field"><label>Rujukan</label><b>PTIS/09-26</b></div>
+          </div>
+        </header>
+
+        <div class="row1">
+          <section class="tallybox" aria-labelledby="t1">
+            <div class="lbl" id="t1"><svg class="i" style="width:14px;height:14px"><use href="#i-school"/></svg><b>Seksyen A</b> · Liputan sekolah</div>
+            <div class="count"><span class="n">21</span><span class="of">/83</span><p>sekolah telah dilawati. 62 lagi dalam senarai.</p></div>
+            <svg id="tally" viewBox="0 0 520 64" role="img" aria-label="Tanda kiraan: 21 sekolah dilawati"></svg>
+            <div class="tally-cap mono"><span>Satu garis = satu sekolah</span><span>25% liputan</span></div>
+            <div class="stamp" aria-hidden="true">Disahkan<small>18 SEP 2026</small></div>
+            <div class="cta">
+              <a class="btn btn-ink" href="#"><svg class="i"><use href="#i-form"/></svg>Cipta Laporan Lawatan<svg class="i arr"><use href="#i-arrow"/></svg></a>
+              <a class="btn btn-line" href="#"><svg class="i"><use href="#i-bar"/></svg>Buka Analisis JTK<svg class="i arr"><use href="#i-arrow"/></svg></a>
+            </div>
+          </section>
+
+          <section class="issues" aria-labelledby="t2">
+            <h2 class="lbl" id="t2"><span><b>Seksyen B</b> · Kategori aduan</span><span>20 aduan</span></h2>
+            <div class="iss top"><span class="ic"><svg class="i"><use href="#i-wifi"/></svg></span><div><b>Rangkaian</b><div class="meter"><span style="--w:50%"></span></div></div><div class="v">10<small>50%</small></div></div>
+            <div class="iss"><span class="ic"><svg class="i"><use href="#i-printer"/></svg></span><div><b>Pencetak</b><div class="meter"><span style="--w:15%"></span></div></div><div class="v">3<small>15%</small></div></div>
+            <div class="iss"><span class="ic"><svg class="i"><use href="#i-laptop"/></svg></span><div><b>Komputer</b><div class="meter"><span style="--w:15%"></span></div></div><div class="v">3<small>15%</small></div></div>
+            <div class="iss"><span class="ic"><svg class="i"><use href="#i-cog"/></svg></span><div><b>Sistem</b><div class="meter"><span style="--w:15%"></span></div></div><div class="v">3<small>15%</small></div></div>
+            <div class="iss"><span class="ic"><svg class="i"><use href="#i-wrench"/></svg></span><div><b>Penyelenggaraan</b><div class="meter"><span style="--w:5%"></span></div></div><div class="v">1<small>5%</small></div></div>
+          </section>
+        </div>
+
+        <div class="figs">
+          <div class="fig"><svg class="i"><use href="#i-clock"/></svg><div><b>30</b><span class="mono">Sesi bantu</span></div></div>
+          <div class="fig"><svg class="i"><use href="#i-team"/></svg><div><b>37</b><span class="mono">Pegawai terlibat</span></div></div>
+          <div class="fig"><svg class="i"><use href="#i-ticket"/></svg><div><b>14<span class="isd">ISD</span></b><span class="mono">Tiket</span></div></div>
+          <div class="fig"><svg class="i"><use href="#i-bar"/></svg><div><b>1.3</b><span class="mono">Purata sehari</span></div></div>
+        </div>
+
+        <div class="row2">
+          <section aria-labelledby="t3">
+            <div class="sec-h"><span class="no">C</span><h2 id="t3">Log lawatan terkini</h2><a href="#">Semua rekod</a></div>
+            <table>
+              <thead><tr><th>Tarikh</th><th>Sekolah &amp; tindakan</th><th>Zon</th><th>Kategori</th><th>Status</th></tr></thead>
+              <tbody>
+                <tr><td class="d">18.09<small>RAB</small></td><td class="c1"><h3>SMK St Teresa</h3><p>Memastikan tiada masalah capaian talian internet bagi menyokong sesi PdP.</p></td><td class="z"><span class="zb" style="--c:var(--z5)">ZON 5</span></td><td class="k"><span class="cat"><svg class="i"><use href="#i-wifi"/></svg>Rangkaian</span></td><td class="s"><span class="mini-stamp">DIREKOD</span></td></tr>
+                <tr><td class="d">17.09<small>KHA</small></td><td class="c1"><h3>SK Rampangi</h3><p>Pemasangan antivirus pada unit komputer riba; keselamatan data terpelihara.</p></td><td class="z"><span class="zb" style="--c:var(--z2)">ZON 2</span></td><td class="k"><span class="cat"><svg class="i"><use href="#i-laptop"/></svg>Komputer</span></td><td class="s"><span class="mini-stamp">DIREKOD</span></td></tr>
+                <tr><td class="d">17.09<small>KHA</small></td><td class="c1"><h3>SK Merpati Jepang</h3><p>Pemeriksaan talian &amp; Access Point; kabel dibaiki selepas projek tingkap.</p></td><td class="z"><span class="zb" style="--c:var(--z6)">ZON 6</span></td><td class="k"><span class="cat"><svg class="i"><use href="#i-wifi"/></svg>Rangkaian</span></td><td class="s"><span class="mini-stamp">DIREKOD</span></td></tr>
+              </tbody>
+            </table>
+          </section>
+          <section aria-labelledby="t4">
+            <div class="sec-h"><span class="no">D</span><h2 id="t4">Senarai semak zon</h2><a href="#">Analisis</a></div>
+            <div id="zones"></div>
+            <p class="note">Setiap kotak = satu sekolah. Hab PPD dikecualikan.</p>
+          </section>
+        </div>
+
+        <div class="att">
+          <a class="card" href="#"><span class="clip" aria-hidden="true"></span><span class="tag mono">Lampiran 1</span><span class="ic"><svg class="i"><use href="#i-qr"/></svg></span><b>Kod QR &amp; Short URL</b><small>Jana pautan ppdk.ch/slug</small></a>
+          <a class="card" href="#"><span class="clip" aria-hidden="true"></span><span class="tag mono">Lampiran 2</span><span class="ic"><svg class="i"><use href="#i-install"/></svg></span><b>Pasang aplikasi</b><small>PWA untuk telefon &amp; desktop</small></a>
+          <a class="card" href="#"><span class="clip" aria-hidden="true"></span><span class="tag mono">Lampiran 3</span><span class="ic"><svg class="i"><use href="#i-radar"/></svg></span><b>Radar 83 Sekolah</b><small>Peta liputan lapan zon</small></a>
+          <a class="card" href="#"><span class="clip" aria-hidden="true"></span><span class="tag mono">Lampiran 4</span><span class="ic"><svg class="i"><use href="#i-report"/></svg></span><b>Laporan Rasmi</b><small>Format hantaran &amp; cetakan</small></a>
+        </div>
+
+        <footer class="foot mono"><span>© 2026 Sektor Pengurusan Maklumat &amp; ICT, PPD Kuching</span><span>Sistem PTIS · Muka 1/1</span></footer>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// tanda kiraan: kumpulan lima (4 tegak + 1 serong), jitter tetap supaya nampak ditulis tangan
+const T=document.getElementById('tally'), NS='http://www.w3.org/2000/svg';
+let n=21, x=6, k=0; const j=i=>((i*37)%7-3)*0.6;
+while(n>0){
+  const g=Math.min(5,n);
+  for(let i=0;i<Math.min(4,g);i++){const p=document.createElementNS(NS,'path');const xx=x+i*11;p.setAttribute('d',`M${xx+j(k)} ${10+j(k+1)} L${xx+j(k+2)} ${54+j(k+3)}`);p.setAttribute('stroke','var(--ink)');p.setAttribute('stroke-width','3');p.setAttribute('stroke-linecap','round');p.setAttribute('class','stroke');p.style.animationDelay=(k*45)+'ms';T.appendChild(p);k++;}
+  if(g===5){const p=document.createElementNS(NS,'path');p.setAttribute('d',`M${x-5} ${46+j(k)} L${x+40} ${16+j(k+1)}`);p.setAttribute('stroke','var(--stamp)');p.setAttribute('stroke-width','3');p.setAttribute('stroke-linecap','round');p.setAttribute('class','stroke');p.style.animationDelay=(k*45)+'ms';T.appendChild(p);k++;}
+  n-=g; x+=g===5?74:40;
+}
+// senarai semak zon
+const Z=[[1,3,7],[2,2,9],[3,1,10],[4,6,11],[5,3,12],[6,1,11],[7,1,11],[8,4,12]];
+document.getElementById('zones').innerHTML=Z.map(([z,v,t])=>`<div class="zrow"><span class="zb" style="--c:var(--z${z})">ZON ${z}</span><div class="boxes" role="img" aria-label="Zon ${z}: ${v} daripada ${t}">${Array.from({length:t},(_,i)=>`<i class="${i<v?'v':''}" style="--c:var(--z${z})"></i>`).join('')}</div><div class="f">${v}/${t}<small>${Math.round(v/t*100)}%</small></div></div>`).join('');
+</script>
+</body>
+</html>

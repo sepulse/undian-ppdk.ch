@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PPDK.CH — Undian Reka Bentuk Home</title>
+<meta name="description" content="Tujuh varian reka bentuk halaman utama PPDK.CH. Lihat setiap satu dan undi pilihan anda.">
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#EDEDE8; --card:#FFFFFF; --ink:#15191C; --ink-2:#464C52; --muted:#7B8288; --rule:#DADAD3; --rule-2:#C4C4BB;
+  --accent:#15191C;
+  --display:"Archivo",system-ui,sans-serif; --sans:"IBM Plex Sans",system-ui,sans-serif; --mono:"IBM Plex Mono",ui-monospace,monospace;
+  --top:64px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{background:var(--bg);color:var(--ink);font:15px/1.5 var(--sans);-webkit-font-smoothing:antialiased;display:flex;flex-direction:column}
+a{color:inherit;text-decoration:none}
+button{font:inherit;cursor:pointer;background:none;border:0;color:inherit}
+:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
+.mono{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase}
+svg.i{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;flex:none}
+
+/* ---------- BAR ATAS ---------- */
+.top{height:var(--top);flex:none;background:var(--ink);color:#fff;display:flex;align-items:center;gap:20px;padding:0 20px}
+.top .brand{font:800 18px/1 var(--display);font-stretch:112%;letter-spacing:-.01em;white-space:nowrap}
+.top .t{display:flex;flex-direction:column;min-width:0}
+.top .t b{font-weight:600;font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.top .t span{color:rgba(255,255,255,.6)}
+.sep{width:1px;height:28px;background:rgba(255,255,255,.18)}
+.tools{margin-left:auto;display:flex;align-items:center;gap:8px}
+.seg{display:flex;border:1px solid rgba(255,255,255,.25)}
+.seg button{height:36px;padding:0 12px;display:flex;align-items:center;gap:7px;font-size:13px;font-weight:600;color:rgba(255,255,255,.7)}
+.seg button[aria-pressed="true"]{background:#fff;color:var(--ink)}
+.tb{height:38px;padding:0 14px;display:inline-flex;align-items:center;gap:8px;font-size:13px;font-weight:600;border:1px solid rgba(255,255,255,.25);color:#fff;white-space:nowrap}
+.tb:hover{border-color:#fff}
+.vote{background:#fff;color:var(--ink);border-color:#fff}
+.vote:hover{background:#E8E8E2}
+.vote[aria-disabled="true"]{opacity:.55;cursor:not-allowed}
+
+/* ---------- JALUR PILIHAN ---------- */
+.strip{flex:none;background:var(--card);border-bottom:1px solid var(--rule);display:flex;align-items:stretch}
+.nav-btn{flex:none;width:48px;display:grid;place-items:center;border-right:1px solid var(--rule);color:var(--ink-2)}
+.nav-btn:last-child{border-right:0;border-left:1px solid var(--rule)}
+.nav-btn:hover{background:var(--bg);color:var(--ink)}
+.opts{flex:1;display:flex;overflow-x:auto;scrollbar-width:none;scroll-snap-type:x proximity}
+.opts::-webkit-scrollbar{display:none}
+.opt{flex:1 0 176px;scroll-snap-align:start;display:grid;grid-template-columns:auto 1fr;gap:4px 12px;align-items:center;text-align:left;padding:12px 16px;border-right:1px solid var(--rule);position:relative;transition:background .15s}
+.opt:last-child{border-right:0}
+.opt:hover{background:#F7F7F4}
+.opt .no{grid-row:1/3;width:34px;height:34px;display:grid;place-items:center;font:800 17px/1 var(--display);font-stretch:85%;background:var(--bg);color:var(--ink)}
+.opt b{font-size:14px;white-space:nowrap}
+.opt .sw{display:flex;gap:2px}
+.opt .sw i{width:14px;height:6px}
+.opt[aria-selected="true"]{background:#F7F7F4}
+.opt[aria-selected="true"]::after{content:"";position:absolute;left:0;right:0;bottom:0;height:3px;background:var(--ink)}
+.opt[aria-selected="true"] .no{background:var(--ink);color:#fff}
+
+/* ---------- KETERANGAN ---------- */
+.info{flex:none;display:flex;align-items:center;gap:18px;padding:10px 20px;border-bottom:1px solid var(--rule);background:var(--bg)}
+.info h1{font:800 20px/1.1 var(--display);font-stretch:95%;letter-spacing:-.01em;white-space:nowrap}
+.info p{color:var(--ink-2);font-size:14px;min-width:0}
+.tags{margin-left:auto;display:flex;gap:6px;flex:none}
+.meta{display:flex;align-items:center;gap:14px;flex:none;padding-left:14px;border-left:1px solid var(--rule)}
+.tags span{height:24px;padding:0 8px;display:inline-flex;align-items:center;background:var(--card);border:1px solid var(--rule);font:500 11px/1 var(--mono);letter-spacing:.04em;color:var(--ink-2);white-space:nowrap}
+
+/* ---------- PENTAS ---------- */
+.stage{flex:1;min-height:0;position:relative;display:flex;justify-content:center;align-items:flex-start;overflow:auto}
+.frame{width:100%;height:100%;border:0;display:block;background:#fff}
+.stage.phone{padding:24px 16px 32px;background:
+  radial-gradient(circle at 50% 0,#F6F6F2,transparent 60%),var(--bg)}
+.device{display:none}
+.stage.phone .device{display:block;width:390px;flex:none;border:10px solid var(--ink);box-shadow:0 30px 60px -30px rgba(0,0,0,.45);background:var(--ink);position:relative}
+.stage.phone .device::before{content:"";position:absolute;top:-6px;left:50%;transform:translateX(-50%);width:84px;height:5px;background:#2E3338}
+.stage.phone .device .frame{width:100%;height:min(844px,calc(100vh - 230px));min-height:520px}
+.stage.phone > .frame{display:none}
+.loading{position:absolute;inset:0;display:grid;place-items:center;pointer-events:none;color:var(--muted);opacity:0;transition:opacity .2s}
+.stage.busy .loading{opacity:1}
+
+.note{display:inline-flex;align-items:center;gap:7px;color:var(--muted);white-space:nowrap}
+.note i{width:7px;height:7px;background:#F59E0B}
+.keys{display:inline-flex;align-items:center;gap:5px;color:var(--muted);white-space:nowrap}
+.keys kbd{font:600 11px/1 var(--mono);border:1px solid var(--rule-2);padding:3px 6px;background:var(--bg);color:var(--ink)}
+
+/* ---------- MODAL UNDI ---------- */
+dialog{margin:auto;border:0;padding:0;max-width:min(520px,calc(100vw - 32px));width:100%;background:var(--card);color:var(--ink);box-shadow:0 30px 80px -20px rgba(0,0,0,.5)}
+dialog::backdrop{background:rgba(21,25,28,.55)}
+.dlg{padding:24px}
+.dlg h2{font:800 22px/1.1 var(--display);font-stretch:95%}
+.dlg p{margin-top:8px;color:var(--ink-2);font-size:14px}
+.pick{margin-top:16px;display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:6px}
+.pick button{display:flex;align-items:center;gap:10px;padding:10px;border:1px solid var(--rule);text-align:left;font-size:13.5px;font-weight:600}
+.pick button span{width:26px;height:26px;display:grid;place-items:center;background:var(--bg);font:800 14px/1 var(--display)}
+.pick button[aria-pressed="true"]{border-color:var(--ink);box-shadow:inset 0 0 0 1px var(--ink)}
+.pick button[aria-pressed="true"] span{background:var(--ink);color:#fff}
+.dlg .act{margin-top:18px;display:flex;justify-content:flex-end;gap:8px}
+.dlg .act button,.dlg .act a{height:42px;padding:0 16px;display:inline-flex;align-items:center;gap:8px;font-weight:600;border:1.5px solid var(--ink)}
+.dlg .act .go{background:var(--ink);color:#fff}
+.dlg .hint{margin-top:12px;font-size:12.5px;color:var(--muted)}
+
+@media (max-width:1100px){
+  .tags,.keys{display:none}
+  .meta{margin-left:auto}
+}
+@media (max-width:860px){
+  :root{--top:56px}
+  .top{gap:12px;padding:0 12px}
+  .top .t span,.sep,.seg,.full-t{display:none}
+  .tb{padding:0 10px}
+  .nav-btn{display:none}
+  .opt{flex:0 0 150px;padding:10px 12px}
+  .info{flex-direction:column;align-items:flex-start;gap:2px;padding:10px 14px}
+  .info h1{font-size:18px}
+  .meta{display:none}
+  .info p{font-size:13px}
+}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-desk" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="12"/><path d="M8 20h8M12 16v4"/></symbol>
+  <symbol id="i-phone" viewBox="0 0 24 24"><rect x="7" y="2" width="10" height="20"/><path d="M11 18h2"/></symbol>
+  <symbol id="i-ext" viewBox="0 0 24 24"><path d="M14 4h6v6M20 4l-9 9M18 14v6H4V6h6"/></symbol>
+  <symbol id="i-vote" viewBox="0 0 24 24"><path d="M4 12l5 5L20 6"/></symbol>
+  <symbol id="i-l" viewBox="0 0 24 24"><path d="M15 6l-6 6 6 6"/></symbol>
+  <symbol id="i-r" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></symbol>
+</svg>
+
+<header class="top">
+  <span class="brand">PPDK.CH</span>
+  <span class="sep"></span>
+  <div class="t"><b>Undian reka bentuk halaman utama</b><span class="mono">Varian A – G · pilih satu</span></div>
+  <div class="tools">
+    <div class="seg" role="group" aria-label="Saiz paparan">
+      <button id="bDesk" aria-pressed="true"><svg class="i"><use href="#i-desk"/></svg>Desktop</button>
+      <button id="bPhone" aria-pressed="false"><svg class="i"><use href="#i-phone"/></svg>Telefon</button>
+    </div>
+    <a class="tb" id="full" href="#" target="_blank" rel="noopener"><svg class="i"><use href="#i-ext"/></svg><span class="full-t">Skrin penuh</span></a>
+    <button class="tb vote" id="voteBtn"><svg class="i"><use href="#i-vote"/></svg>Undi</button>
+  </div>
+</header>
+
+<div class="strip">
+  <button class="nav-btn" id="prev" aria-label="Pilihan sebelum"><svg class="i"><use href="#i-l"/></svg></button>
+  <div class="opts" id="opts" role="tablist" aria-label="Pilihan reka bentuk"></div>
+  <button class="nav-btn" id="next" aria-label="Pilihan seterusnya"><svg class="i"><use href="#i-r"/></svg></button>
+</div>
+
+<div class="info">
+  <h1 id="iName"></h1>
+  <p id="iDesc"></p>
+  <div class="tags" id="iTags"></div>
+  <div class="meta"><span class="note mono"><i></i>Data simulasi</span><span class="keys mono"><kbd>←</kbd><kbd>→</kbd></span></div>
+</div>
+
+<main class="stage busy" id="stage">
+  <iframe class="frame" id="fDesk" title="Pratonton reka bentuk (desktop)"></iframe>
+  <div class="device"><iframe class="frame" id="fPhone" title="Pratonton reka bentuk (telefon)"></iframe></div>
+  <div class="loading mono">Memuatkan…</div>
+</main>
+
+
+<dialog id="dlg" aria-labelledby="dTitle">
+  <form method="dialog" class="dlg">
+    <h2 id="dTitle">Undi pilihan anda</h2>
+    <p>Pilih satu arah yang paling sesuai untuk halaman utama PPDK.CH.</p>
+    <div class="pick" id="pick"></div>
+    <p class="hint" id="dHint"></p>
+    <div class="act">
+      <button value="cancel">Batal</button>
+      <a class="go" id="goVote" href="#" target="_blank" rel="noopener"><svg class="i"><use href="#i-vote"/></svg>Hantar undian</a>
+    </div>
+  </form>
+</dialog>
+
+<script>
+/* ============ TETAPAN ============
+   POLL_URL: pautan borang undian (Google Forms / Microsoft Forms / Slido).
+   Kosongkan jika belum ada — butang "Hantar undian" akan salin pilihan ke papan keratan sebagai ganti.
+   Untuk Google Forms dengan pra-isi, letak {pilihan} di tempat nilai; contoh:
+   'https://docs.google.com/forms/d/e/XXXX/viewform?usp=pp_url&entry.123456={pilihan}' */
+const POLL_URL = '';
+
+const OPTS = [
+  { no:'A', file:'v/varian_A.html', name:'Varian A', sw:['#F2F0EA','#0A2B2F','#8FE0D3'],
+    desc:'Pusat kawalan yang tenang: panel petrol gelap dengan matriks 83 petak — setiap sekolah satu petak.',
+    tags:['Cerah + panel gelap','Sidebar','Matriks sekolah'] },
+  { no:'B', file:'v/varian_B.html', name:'Varian B', sw:['#EDF1F1','#13233A','#F7F9F8'],
+    desc:'Lembaran juruukur: 83 sekolah di koordinat sebenar, wilayah zon dilukis, tapis zon & sorot sekolah.',
+    tags:['Cerah','Rel ikon','Peta geografi'] },
+  { no:'C', file:'v/varian_C.html', name:'Varian C', sw:['#111110','#EEEBE3','#A78BFA'],
+    desc:'Paksi masa: kalendar September — setiap lawatan satu petak pada harinya, dengan irama setiap zon.',
+    tags:['Gelap','Sidebar','Kalendar'] },
+  { no:'D', file:'v/varian_D.html', name:'Varian D', sw:['#FBF9F3','#1B2440','#2E4A9E'],
+    desc:'Fail pejabat yang dihormati: kertas graf, tab indeks, tanda kiraan 21 sekolah, cop "DIREKOD".',
+    tags:['Cerah','Tab indeks','Kategori aduan'] },
+  { no:'E', file:'v/varian_E.html', name:'Varian E', sw:['#F3F6F8','#10283A','#8B5CF6'],
+    desc:'Ilustrasi isometrik dari data: setiap zon sebuah bangunan, setiap tingkap sekolah, bernyala = dilawati.',
+    tags:['Cerah','Sidebar ikon','Ilustrasi'] },
+  { no:'F', file:'v/varian_F.html', name:'Varian F', sw:['#F6F6F3','#16181A','#EC4899'],
+    desc:'Peta kereta api skematik: hab PPD Kuching, lapan laluan zon, garis penuh = jarak yang sudah dilalui.',
+    tags:['Cerah','Sidebar','Kemajuan'] },
+  { no:'G', file:'v/varian_G.html', name:'Varian G', sw:['#F3F3EF','#15191C','#16A34A'],
+    desc:'Lapan kad setara: peta kecil wilayah, nisbah liputan, irama harian dan status setiap zon.',
+    tags:['Cerah','Sidebar','Perbandingan zon'] },
+];
+
+const $=id=>document.getElementById(id);
+const opts=$('opts'), stage=$('stage'), fD=$('fDesk'), fP=$('fPhone');
+let cur=0, mode='desk', chosen=null;
+
+opts.innerHTML=OPTS.map((o,i)=>`<button class="opt" role="tab" id="t${i}" aria-selected="false" aria-controls="stage"><span class="no">${o.no}</span><b>${o.name}</b><span class="sw">${o.sw.map(c=>`<i style="background:${c};outline:1px solid rgba(0,0,0,.08)"></i>`).join('')}</span></button>`).join('');
+[...opts.children].forEach((b,i)=>b.addEventListener('click',()=>go(i)));
+
+function load(){
+  const f=OPTS[cur].file, target=mode==='desk'?fD:fP, other=mode==='desk'?fP:fD;
+  if(target.getAttribute('src')!==f){stage.classList.add('busy');target.setAttribute('src',f);}
+  else stage.classList.remove('busy');
+  other.removeAttribute('src');
+}
+fD.addEventListener('load',()=>stage.classList.remove('busy'));
+fP.addEventListener('load',()=>stage.classList.remove('busy'));
+
+function go(i){
+  cur=(i+OPTS.length)%OPTS.length; const o=OPTS[cur];
+  [...opts.children].forEach((b,j)=>b.setAttribute('aria-selected',String(j===cur)));
+  opts.children[cur].scrollIntoView({block:'nearest',inline:'nearest',behavior:'smooth'});
+  $('iName').textContent=o.name; $('iDesc').textContent=o.desc;
+  $('iTags').innerHTML=o.tags.map(t=>`<span>${t}</span>`).join('');
+  $('full').href=o.file; document.title=`${o.name} — Undian PPDK.CH`;
+  history.replaceState(null,'','#'+o.no); load();
+}
+function setMode(m){
+  mode=m; stage.classList.toggle('phone',m==='phone');
+  $('bDesk').setAttribute('aria-pressed',String(m==='desk')); $('bPhone').setAttribute('aria-pressed',String(m==='phone'));
+  load();
+}
+$('bDesk').onclick=()=>setMode('desk'); $('bPhone').onclick=()=>setMode('phone');
+$('prev').onclick=()=>go(cur-1); $('next').onclick=()=>go(cur+1);
+document.addEventListener('keydown',e=>{ if($('dlg').open)return; if(e.key==='ArrowRight')go(cur+1); if(e.key==='ArrowLeft')go(cur-1); });
+
+// undi
+const pick=$('pick');
+pick.innerHTML=OPTS.map((o,i)=>`<button type="button" data-i="${i}" aria-pressed="false"><span>${o.no}</span>${o.name}</button>`).join('');
+function choose(i){chosen=i;[...pick.children].forEach((b,j)=>b.setAttribute('aria-pressed',String(j===i)));
+  const label=OPTS[i].name;
+  if(POLL_URL){$('goVote').href=POLL_URL.replace('{pilihan}',encodeURIComponent(label));$('dHint').textContent='Anda akan dibawa ke borang undian rasmi.';}
+  else{$('goVote').href='#';$('dHint').textContent='Pautan borang belum ditetapkan — butang akan menyalin pilihan anda untuk ditampal ke kumpulan/emel.';}
+}
+pick.addEventListener('click',e=>{const b=e.target.closest('button');if(b)choose(+b.dataset.i);});
+$('voteBtn').onclick=()=>{choose(cur);$('dlg').showModal();};
+$('goVote').addEventListener('click',async e=>{
+  if(chosen===null){e.preventDefault();return;}
+  if(!POLL_URL){e.preventDefault();const t=`Undian reka bentuk PPDK.CH: ${OPTS[chosen].name}`;
+    try{await navigator.clipboard.writeText(t);$('dHint').textContent='Disalin: "'+t+'". Tampal dalam kumpulan WhatsApp/emel.';}catch(_){$('dHint').textContent=t;}}
+});
+
+window.addEventListener('hashchange',()=>{const i=OPTS.findIndex(o=>'#'+o.no===location.hash);if(i>=0&&i!==cur)go(i);});
+// mula: dari #nombor jika ada
+const start=Math.max(0,OPTS.findIndex(o=>'#'+o.no===location.hash));
+go(start<0?0:start);
+</script>
+</body>
+</html>

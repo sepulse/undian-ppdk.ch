@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PPDK.CH — Varian G</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* ARAH H "KAD ZON" — lapan kad setara, satu untuk setiap zon. Paksi: perbandingan.
+   Setiap kad: peta kecil wilayah (koordinat sebenar), nisbah liputan, irama harian, status.
+   Cerah; kad putih di atas kelabu hangat; jalur warna zon di atas kad. */
+:root{
+  --bg:#F3F3EF; --card:#FFFFFF; --ink:#15191C; --ink-2:#454C52; --muted:#7B8288; --rule:#E3E3DD; --rule-2:#CFCFC7;
+  --isd:#DC2626; --ok:#15803D; --ok-bg:#DCFCE7; --warn:#B45309; --warn-bg:#FEF3C7;
+  --z1:#2563EB; --z2:#16A34A; --z3:#F59E0B; --z4:#8B5CF6; --z5:#EC4899; --z6:#06B6D4; --z7:#D97706; --z8:#475569;
+  --display:"Archivo",system-ui,sans-serif; --sans:"IBM Plex Sans",system-ui,sans-serif; --mono:"IBM Plex Mono",ui-monospace,monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--ink);font:15px/1.5 var(--sans);-webkit-font-smoothing:antialiased}
+a{color:inherit;text-decoration:none}
+button{font:inherit;cursor:pointer;background:none;border:0;color:inherit}
+:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
+.mono{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase}
+svg.i{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;flex:none}
+
+.shell{display:grid;grid-template-columns:232px 1fr;min-height:100vh}
+.side{position:sticky;top:0;height:100vh;background:var(--card);border-right:1px solid var(--rule);padding:22px 14px 16px;display:flex;flex-direction:column}
+.brand{padding:0 8px}
+.brand b{font:800 21px/1 var(--display);font-stretch:112%;letter-spacing:-.01em}
+.brand .strip{display:flex;gap:2px;margin-top:10px}
+.brand .strip i{flex:1;height:4px}
+.brand small{display:block;margin-top:8px;color:var(--muted)}
+.nav{margin-top:26px;display:flex;flex-direction:column;gap:2px}
+.nav a{display:flex;align-items:center;gap:12px;padding:9px 8px;font-size:14px;font-weight:500;color:var(--ink-2)}
+.nav a:hover{background:var(--bg);color:var(--ink)}
+.nav a.on{background:var(--ink);color:#fff}
+.side .end{margin-top:auto;padding-top:14px;border-top:1px solid var(--rule)}
+.side .end a{display:flex;align-items:center;gap:10px;padding:9px 8px;font-size:14px;color:var(--ink-2)}
+.sim{display:flex;align-items:center;gap:8px;padding:0 8px 8px;color:var(--muted)}
+.sim i{width:7px;height:7px;background:var(--z3)}
+
+.main{min-width:0;padding:0 max(32px,calc((100% - 1440px)/2)) 36px}
+.top{display:flex;justify-content:space-between;align-items:center;height:66px}
+.top .mono{color:var(--muted)} .top b{color:var(--ink);font-weight:600}
+.iconbtn{width:40px;height:40px;background:var(--card);border:1px solid var(--rule);display:grid;place-items:center}
+.menu{display:none!important}
+
+/* ---------- RINGKASAN ---------- */
+.sum{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:32px;align-items:end;padding:18px 0 22px}
+.sum .mono{color:var(--muted)}
+.sum h1{margin-top:8px;font:800 clamp(30px,3.2vw,46px)/1 var(--display);font-stretch:92%;letter-spacing:-.025em}
+.sum h1 span{color:var(--muted);font-weight:400}
+.chips{margin-top:14px;display:flex;gap:8px;flex-wrap:wrap}
+.chip{display:inline-flex;align-items:center;gap:8px;height:30px;padding:0 10px;font-size:13px;font-weight:600;background:var(--card);border:1px solid var(--rule)}
+.chip b{font:800 16px/1 var(--display);font-stretch:85%}
+.chip.warn{background:var(--warn-bg);border-color:transparent;color:var(--warn)}
+.chip.ok{background:var(--ok-bg);border-color:transparent;color:var(--ok)}
+.isd{font:700 10px/1 var(--sans);letter-spacing:.04em;color:#fff;background:var(--isd);padding:4px 6px}
+.sum-r{display:flex;align-items:flex-end;gap:24px}
+.ring{display:flex;align-items:flex-end;gap:6px}
+.ring .n{font:800 84px/.8 var(--display);font-stretch:72%;letter-spacing:-.03em}
+.ring .of{font:400 30px/1 var(--display);font-stretch:72%;color:var(--muted);padding-bottom:2px}
+.cta{display:grid;gap:8px}
+.btn{display:flex;justify-content:space-between;align-items:center;gap:14px;height:46px;padding:0 16px;font-weight:600;border:1.5px solid var(--ink);background:var(--card);transition:background .15s}
+.btn .arr{transition:transform .2s}
+.btn:hover .arr{transform:translateX(3px)}
+.btn-ink{background:var(--ink);color:#fff}
+.btn-ink:hover{background:#2B3136}
+.btn-line:hover{background:var(--bg)}
+
+/* ---------- KAD ZON ---------- */
+.deck{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}
+.card{position:relative;background:var(--card);border:1px solid var(--rule);display:flex;flex-direction:column;transition:transform .2s ease,box-shadow .2s ease,border-color .2s}
+.card::before{content:"";height:5px;background:var(--c)}
+.card:hover{transform:translateY(-3px);border-color:var(--rule-2);box-shadow:0 10px 24px -14px rgba(21,25,28,.35)}
+.card-in{padding:14px 16px 14px;display:flex;flex-direction:column;flex:1}
+.ch{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.zb{display:inline-flex;align-items:center;height:22px;padding:0 7px;font:700 10.5px/1 var(--sans);letter-spacing:.04em;color:#fff;background:var(--c);white-space:nowrap}
+.tag{display:inline-flex;align-items:center;gap:5px;height:22px;padding:0 7px;font:600 11px/1 var(--sans)}
+.tag.warn{background:var(--warn-bg);color:var(--warn)}
+.tag.ok{background:var(--ok-bg);color:var(--ok)}
+.tag.mid{background:var(--bg);color:var(--ink-2)}
+.tag svg.i{width:12px;height:12px;stroke-width:2.2}
+.cnum{display:flex;align-items:flex-end;justify-content:space-between;margin-top:14px}
+.cnum b{font:800 52px/.82 var(--display);font-stretch:74%;letter-spacing:-.03em}
+.cnum b small{font-size:.44em;font-weight:500;color:var(--muted);letter-spacing:0}
+.cnum .pc{text-align:right}
+.cnum .pc strong{display:block;font:700 20px/1 var(--display);font-stretch:85%}
+.cnum .pc span{color:var(--muted)}
+.mini{margin-top:12px;height:124px;background:
+  linear-gradient(var(--bg),var(--bg)) padding-box;position:relative}
+.mini svg{width:100%;height:100%;display:block}
+.mini .nth{position:absolute;right:8px;top:6px;font:600 9px/1 var(--mono);color:var(--muted)}
+.days{margin-top:12px}
+.days .row{display:grid;grid-template-columns:repeat(30,1fr);gap:2px;height:20px;align-items:end}
+.days i{display:block;height:3px;background:var(--rule)}
+.days i.on{height:100%;background:var(--c)}
+.days i.two{height:100%;background:var(--c);box-shadow:inset 0 -6px 0 rgba(0,0,0,.28)}
+.days i.f{background:transparent;border-bottom:1px dashed var(--rule-2);height:1px}
+.days .cap{display:flex;justify-content:space-between;margin-top:5px;color:var(--muted);font-size:10px}
+.cf{margin-top:12px;padding-top:10px;border-top:1px solid var(--rule);display:flex;justify-content:space-between;align-items:center;font-size:12.5px;color:var(--ink-2)}
+.cf a{display:inline-flex;align-items:center;gap:4px;font-weight:600;color:var(--ink)}
+.cf a svg.i{width:14px;height:14px;transition:transform .2s}
+.card:hover .cf a svg.i{transform:translateX(3px)}
+
+/* ---------- BAWAH ---------- */
+.row2{display:grid;grid-template-columns:minmax(0,7fr) minmax(0,5fr);gap:14px;margin-top:22px}
+.pan{background:var(--card);border:1px solid var(--rule)}
+.pan-h{display:flex;justify-content:space-between;align-items:center;padding:14px 18px;border-bottom:1px solid var(--rule)}
+.pan-h h2{font:700 17px/1 var(--display);font-stretch:95%}
+.pan-h a{font-size:13px;font-weight:600;color:var(--ink-2)}
+.v{display:grid;grid-template-columns:56px 1fr auto;gap:14px;padding:14px 18px;border-bottom:1px solid var(--rule)}
+.v:last-child{border-bottom:0}
+.v .d{font:800 28px/.9 var(--display);font-stretch:78%}
+.v .d small{display:block;margin-top:4px;font:500 10px/1 var(--mono);letter-spacing:.1em;color:var(--muted)}
+.v h3{font-size:14px;font-weight:700;text-transform:uppercase;letter-spacing:.01em}
+.v p{font-size:13px;color:var(--ink-2);margin-top:2px}
+.links a{display:flex;align-items:center;gap:12px;padding:14px 18px;border-bottom:1px solid var(--rule);transition:background .15s}
+.links a:last-child{border-bottom:0}
+.links a:hover{background:var(--bg)}
+.links .ic{width:36px;height:36px;background:var(--bg);display:grid;place-items:center}
+.links b{display:block;font-size:14px}
+.links small{font-size:12.5px;color:var(--muted)}
+.links .go{margin-left:auto;color:var(--muted)}
+.foot{display:flex;justify-content:space-between;margin-top:24px;color:var(--muted)}
+
+@keyframes up{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+.card{animation:up .45s cubic-bezier(.2,.8,.2,1) both}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+
+@media (max-width:1280px){.deck{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:1100px){
+  .sum{grid-template-columns:minmax(0,1fr)}
+  .sum-r{justify-content:space-between}
+  .row2{grid-template-columns:minmax(0,1fr)}
+}
+@media (max-width:860px){
+  .shell{grid-template-columns:1fr}
+  .side{display:none}
+  .main{padding:0 16px 32px}
+  .menu{display:grid!important}
+  .top .hide-s{display:none}
+}
+@media (max-width:640px){
+  .sum-r{flex-direction:column;align-items:stretch;gap:16px}
+  .ring .n{font-size:72px}
+  /* dek jadi karusel sentuh: skrol dalam elemen sahaja, halaman tidak melimpah */
+  .deck{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;gap:10px;margin:0 -16px;padding:2px 16px 12px;scrollbar-width:none}
+  .deck::-webkit-scrollbar{display:none}
+  .card{flex:0 0 84%;scroll-snap-align:center}
+  .swipe{display:flex!important}
+  .v{grid-template-columns:44px 1fr;position:relative}
+  .v .zcol{position:absolute;right:18px;top:14px}
+  .v h3{padding-right:62px}
+  .foot{flex-direction:column;gap:6px}
+}
+.swipe{display:none;justify-content:space-between;align-items:center;margin:4px 0 0;color:var(--muted)}
+.dots{display:flex;gap:4px}
+.dots i{width:14px;height:4px;background:var(--rule-2)}
+.dots i.on{background:var(--ink)}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-home" viewBox="0 0 24 24"><path d="M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6h-6v6H4a1 1 0 0 1-1-1z"/></symbol>
+  <symbol id="i-form" viewBox="0 0 24 24"><path d="M14 3H6v18h12V7z"/><path d="M14 3v4h4M9 12h6M9 16h6"/></symbol>
+  <symbol id="i-grid" viewBox="0 0 24 24"><path d="M4 4h7v7H4zM13 4h7v7h-7zM4 13h7v7H4zM13 13h7v7h-7z"/></symbol>
+  <symbol id="i-bar" viewBox="0 0 24 24"><path d="M5 20V10M12 20V4M19 20v-7"/></symbol>
+  <symbol id="i-team" viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0M16 4.5a3.5 3.5 0 0 1 0 7M18 14a6 6 0 0 1 3.5 6"/></symbol>
+  <symbol id="i-alert" viewBox="0 0 24 24"><path d="M12 3l10 18H2z"/><path d="M12 10v5M12 18h.01"/></symbol>
+  <symbol id="i-log" viewBox="0 0 24 24"><path d="M5 3h14v18H5z"/><path d="M9 8h6M9 12h6M9 16h3"/></symbol>
+  <symbol id="i-map" viewBox="0 0 24 24"><path d="M9 4L3 6v14l6-2 6 2 6-2V4l-6 2z"/><path d="M9 4v14M15 6v14"/></symbol>
+  <symbol id="i-report" viewBox="0 0 24 24"><path d="M3 4h18v12H3z"/><path d="M8 20h8M12 16v4M7 12l3-3 2 2 4-4"/></symbol>
+  <symbol id="i-qr" viewBox="0 0 24 24"><path d="M4 4h6v6H4zM14 4h6v6h-6zM4 14h6v6H4zM14 14h2v2h-2zM18 18h2v2h-2zM14 18h2v2h-2zM18 14h2v2h-2z"/></symbol>
+  <symbol id="i-lock" viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="10"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></symbol>
+  <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></symbol>
+  <symbol id="i-chev" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></symbol>
+  <symbol id="i-up" viewBox="0 0 24 24"><path d="M5 15l7-7 7 7"/></symbol>
+  <symbol id="i-flag" viewBox="0 0 24 24"><path d="M5 21V4h11l-2 4 2 4H5"/></symbol>
+  <symbol id="i-install" viewBox="0 0 24 24"><rect x="6" y="2" width="12" height="20"/><path d="M12 7v7M9 11l3 3 3-3M10 18h4"/></symbol>
+  <symbol id="i-radar" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><path d="M12 12l6-6"/></symbol>
+  <symbol id="i-moon" viewBox="0 0 24 24"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></symbol>
+  <symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></symbol>
+</svg>
+<div class="shell">
+  <aside class="side">
+    <div class="brand"><b>PPDK.CH</b><div class="strip"><i style="background:var(--z1)"></i><i style="background:var(--z2)"></i><i style="background:var(--z3)"></i><i style="background:var(--z4)"></i><i style="background:var(--z5)"></i><i style="background:var(--z6)"></i><i style="background:var(--z7)"></i><i style="background:var(--z8)"></i></div><small class="mono">Unit ICT · PPD Kuching</small></div>
+    <nav class="nav" aria-label="Utama">
+      <a class="on" href="#"><svg class="i"><use href="#i-home"/></svg>Home</a>
+      <a href="#"><svg class="i"><use href="#i-form"/></svg>Borang PTIS</a>
+      <a href="#"><svg class="i"><use href="#i-grid"/></svg>Dashboard</a>
+      <a href="#"><svg class="i"><use href="#i-bar"/></svg>Analitik Zon</a>
+      <a href="#"><svg class="i"><use href="#i-team"/></svg>Ahli JTK</a>
+      <a href="#"><svg class="i"><use href="#i-alert"/></svg>Isu &amp; Tujuan</a>
+      <a href="#"><svg class="i"><use href="#i-log"/></svg>Rekod Lawatan</a>
+      <a href="#"><svg class="i"><use href="#i-map"/></svg>Peta &amp; Radar</a>
+      <a href="#"><svg class="i"><use href="#i-report"/></svg>Laporan Rasmi</a>
+      <a href="#"><svg class="i"><use href="#i-qr"/></svg>QR &amp; Short URL</a>
+    </nav>
+    <div class="end">
+      <div class="sim mono"><i></i>Pratonton · data simulasi</div>
+      <a href="#"><svg class="i"><use href="#i-lock"/></svg>Login Admin</a>
+    </div>
+  </aside>
+
+  <main class="main">
+    <header class="top">
+      <div style="display:flex;align-items:center;gap:12px"><button class="iconbtn menu" aria-label="Menu"><svg class="i"><use href="#i-menu"/></svg></button><span class="mono"><span class="hide-s">PPDK.CH / Ruang kerja / </span><b>Home</b></span></div>
+      <div style="display:flex;align-items:center;gap:12px"><span class="mono hide-s">Rabu · 23.09.2026</span><button class="iconbtn" aria-label="Mod gelap"><svg class="i"><use href="#i-moon"/></svg></button></div>
+    </header>
+
+    <section class="sum" aria-labelledby="h1">
+      <div>
+        <span class="mono">Liputan mengikut zon · September 2026</span>
+        <h1 id="h1">Lapan zon, satu pandangan. <span>Siapa di hadapan, siapa perlu bantuan.</span></h1>
+        <div class="chips">
+          <span class="chip ok"><svg class="i" style="width:14px;height:14px"><use href="#i-up"/></svg>Zon 4 mendahului · 55%</span>
+          <span class="chip warn"><svg class="i" style="width:14px;height:14px"><use href="#i-flag"/></svg><b>3</b> zon perlu perhatian</span>
+          <span class="chip"><b>30</b> sesi</span>
+          <span class="chip"><b>37</b> pegawai</span>
+          <span class="chip"><b>14</b> tiket <span class="isd">ISD</span></span>
+        </div>
+      </div>
+      <div class="sum-r">
+        <div><span class="mono" style="color:var(--muted)">Sekolah dilawati</span><div class="ring"><span class="n">21</span><span class="of">/83</span></div></div>
+        <div class="cta">
+          <a class="btn btn-ink" href="#">Cipta Laporan Lawatan<svg class="i arr"><use href="#i-arrow"/></svg></a>
+          <a class="btn btn-line" href="#">Buka Analisis JTK<svg class="i arr"><use href="#i-arrow"/></svg></a>
+        </div>
+      </div>
+    </section>
+
+    <section class="deck" id="deck" aria-label="Kad zon"></section>
+    <div class="swipe mono"><span>Leret untuk zon lain</span><span class="dots" id="dots"></span></div>
+
+    <div class="row2">
+      <section class="pan" aria-labelledby="s1">
+        <div class="pan-h"><h2 id="s1">Lawatan terkini</h2><a href="#">Semua rekod →</a></div>
+        <article class="v"><div class="d">18<small>SEP</small></div><div><h3>SMK St Teresa</h3><p>Capaian talian internet disemak bagi kelancaran sesi PdP.</p></div><div class="zcol"><span class="zb" style="--c:var(--z5)">ZON 5</span></div></article>
+        <article class="v"><div class="d">17<small>SEP</small></div><div><h3>SK Rampangi</h3><p>Antivirus dipasang pada unit komputer riba.</p></div><div class="zcol"><span class="zb" style="--c:var(--z2)">ZON 2</span></div></article>
+        <article class="v"><div class="d">17<small>SEP</small></div><div><h3>SK Merpati Jepang</h3><p>Talian &amp; Access Point diperiksa; kabel dibaiki.</p></div><div class="zcol"><span class="zb" style="--c:var(--z6)">ZON 6</span></div></article>
+      </section>
+      <nav class="pan links" aria-label="Pintasan">
+        <div class="pan-h"><h2>Pintasan</h2></div>
+        <a href="#"><span class="ic"><svg class="i"><use href="#i-qr"/></svg></span><span><b>QR &amp; Short URL</b><small>Pautan ppdk.ch/slug</small></span><svg class="i go"><use href="#i-chev"/></svg></a>
+        <a href="#"><span class="ic"><svg class="i"><use href="#i-install"/></svg></span><span><b>Pasang aplikasi</b><small>PWA luar talian</small></span><svg class="i go"><use href="#i-chev"/></svg></a>
+        <a href="#"><span class="ic"><svg class="i"><use href="#i-radar"/></svg></span><span><b>Radar 83 Sekolah</b><small>Peta interaktif penuh</small></span><svg class="i go"><use href="#i-chev"/></svg></a>
+      </nav>
+    </div>
+    <footer class="foot mono"><span>© 2026 Sektor Pengurusan Maklumat &amp; ICT, PPD Kuching</span><span>Sistem PTIS · PPD Kuching</span></footer>
+  </main>
+</div>
+
+<script>
+const S=[[1,1.6749,110.4609,"SJKC CHUNG HUA SUNGAI BUDA"],[1,1.6635,110.4262,"SK BAKO"],[1,1.6348,110.4582,"SK GOEBILT"],[1,1.6213,110.4498,"SK KPG SENARI"],[1,1.648,110.4825,"SK MUARA TEBAS"],[1,1.5948,110.4364,"SK PAJAR SEJINGKAT"],[1,1.6449,110.4475,"SMK BAKO"],[2,1.7012,110.3697,"SJKC CHUNG HUA BUNTAL"],[2,1.6386,110.3378,"SK BANDAR SAMARIANG"],[2,1.7001,110.3707,"SK BUNTAL"],[2,1.6971,110.3109,"SK PASIR PANDAK"],[2,1.6553,110.3324,"SK RAMPANGI"],[2,1.6663,110.295,"SK SALAK"],[2,1.7204,110.316,"SK SANTUBONG"],[2,1.6325,110.3284,"SMK BANDAR SAMARIANG"],[2,1.7241,110.3194,"SMK SANTUBONG"],[3,1.5708,110.3417,"SK ENCIK BUYONG"],[3,1.5611,110.3508,"SK GERSIK"],[3,1.5638,110.3189,"SK GITA"],[3,1.5599,110.3778,"SK MATU BARU"],[3,1.5607,110.3651,"SK PULO"],[3,1.5723,110.3329,"SK RAKYAT TUPONG"],[3,1.5715,110.3347,"SK RPR JALAN ASTANA"],[3,1.5647,110.3175,"SK TAN SRI SULAIMAN DAUD"],[3,1.5653,110.3196,"SMK PETRA JAYA"],[3,1.5615,110.3171,"SMK TUNKU ABDUL RAHMAN"],[4,1.5781,110.3533,"KOLEJ DATUK PATINGGI ABANG HAJI ABDILLAH"],[4,1.5801,110.3596,"SK ASTANA"],[4,1.617,110.3409,"SK AGAMA DATUK HAJI ABDUL KADIR HASSAN"],[4,1.5809,110.3102,"SK PENDIDIKAN KHAS KUCHING"],[4,1.6022,110.3265,"SK SEMARIANG"],[4,1.5826,110.3173,"SK SEMERAH PADI"],[4,1.5991,110.3414,"SK SIOL KANAN"],[4,1.6197,110.3397,"SMK AGAMA TUN AHMAD ZAIDI"],[4,1.5864,110.3692,"SMK DEMAK BARU"],[4,1.5806,110.318,"SMK SEMERAH PADI"],[4,1.5713,110.3635,"SMK TUN ABANG HAJI OPENG"],[5,1.5515,110.3477,"SJKC CHUNG HUA NO 1"],[5,1.5519,110.3617,"SJKC CHUNG HUA NO 3"],[5,1.5552,110.3546,"SK SONG KHENG HAI"],[5,1.5559,110.3474,"SK ST MARY"],[5,1.551,110.3434,"SK ST TERESA"],[5,1.5549,110.3465,"SK ST THOMAS"],[5,1.5473,110.3604,"SK LUMBA KUDA"],[5,1.5483,110.362,"SMK PADUNGAN"],[5,1.5557,110.3469,"SMK ST MARY"],[5,1.5515,110.3426,"SMK ST TERESA"],[5,1.5548,110.3453,"SMK ST THOMAS"],[5,1.5546,110.3494,"SMK TINGGI KUCHING"],[6,1.5487,110.3366,"SJKC CHUNG HUA NO 4"],[6,1.5365,110.3402,"SJKC ST PAUL"],[6,1.5327,110.3465,"SK BATU LINTANG"],[6,1.5368,110.3382,"SK CATHOLIC ENGLISH"],[6,1.5484,110.3239,"SK COMBINED"],[6,1.542,110.3346,"SK GREEN ROAD"],[6,1.5631,110.3318,"SK MERPATI JEPANG"],[6,1.5542,110.3312,"SK RAKYAT BOLHASSAN"],[6,1.5324,110.348,"SMK BATU LINTANG"],[6,1.5443,110.3346,"SMK GREEN ROAD"],[6,1.5513,110.3406,"SMK ST JOSEPH"],[7,1.5437,110.3616,"SJKC CHUNG HUA NO 5"],[7,1.5129,110.353,"SJKC STAMPIN KUCHING"],[7,1.5268,110.3448,"SK JALAN ONG TIANG SWEE"],[7,1.5375,110.3666,"SK KENYALANG"],[7,1.5172,110.3456,"SK LAKSAMANA"],[7,1.4724,110.3389,"SK MEJAR GENERAL DATO IBRAHIM KUCHING"],[7,1.5099,110.3658,"SK SATRIA JAYA"],[7,1.5109,110.3694,"SK SUNGAI STUTONG"],[7,1.5252,110.3667,"SK TABUAN JAYA"],[7,1.5408,110.3597,"SMK BANDAR KUCHING NO 1"],[7,1.5172,110.3514,"SMK DPHA GAPOR"],[8,1.5701,110.3826,"SJKC BINTAWA"],[8,1.508,110.3865,"SJKC CHUNG HUA NO 2"],[8,1.5519,110.3807,"SJKC CHUNG HUA PENDING"],[8,1.5445,110.383,"SJKC SUNGAI APONG"],[8,1.5488,110.3977,"SK MUHIBBAH"],[8,1.5452,110.3812,"SK ST ANDREW"],[8,1.5351,110.3905,"SK TABUAN"],[8,1.537,110.3858,"SK TABUAN HILIR"],[8,1.539,110.3705,"SK TABUAN ULU"],[8,1.5478,110.3831,"SMK PENDING KUCHING"],[8,1.5362,110.3918,"SMK SERI SETIA"],[8,1.5134,110.3851,"SMK TABUAN JAYA"]];
+const VIS={1:3,2:2,3:1,4:6,5:3,6:1,7:1,8:4}, FORCE=['SMK ST TERESA','SK RAMPANGI','SK MERPATI JEPANG'];
+const V={2:[4,2],3:[1,4],4:[2,8,4],7:[2,5],8:[4],9:[2,4,4,8,1],10:[2,5],11:[8,4,3,2],14:[4,5,8],15:[2,1],17:[2,6],18:[5],21:[7]};
+const LAST={1:15,2:17,3:11,4:14,5:18,6:17,7:21,8:14};
+const byZ={}; S.forEach(s=>(byZ[s[0]]=byZ[s[0]]||[]).push(s));
+Object.entries(byZ).forEach(([z,a])=>{let n=VIS[z];a.forEach(s=>{if(FORCE.includes(s[3])){s.v=1;n--;}});a.forEach(s=>{if(!s.v&&n>0){s.v=1;n--;}});});
+function hull(p){p=p.slice().sort((a,b)=>a[0]-b[0]||a[1]-b[1]);const c=(o,a,b)=>(a[0]-o[0])*(b[1]-o[1])-(a[1]-o[1])*(b[0]-o[0]);const lo=[],up=[];for(const q of p){while(lo.length>1&&c(lo[lo.length-2],lo[lo.length-1],q)<=0)lo.pop();lo.push(q);}for(const q of p.slice().reverse()){while(up.length>1&&c(up[up.length-2],up[up.length-1],q)<=0)up.pop();up.push(q);}return lo.slice(0,-1).concat(up.slice(0,-1));}
+const deck=document.getElementById('deck');
+for(let z=1;z<=8;z++){
+  const a=byZ[z], t=a.length, v=VIS[z], p=Math.round(v/t*100);
+  const tag=p<15?'<span class="tag warn"><svg class="i"><use href="#i-flag"/></svg>Perlu perhatian</span>':p>=50?'<span class="tag ok"><svg class="i"><use href="#i-up"/></svg>Mendahului</span>':'<span class="tag mid">Sederhana</span>';
+  // peta kecil: unjuran setempat, kotak 260x124
+  const k=Math.cos(1.6*Math.PI/180), xs=a.map(s=>s[2]*k), ys=a.map(s=>-s[1]);
+  const x0=Math.min(...xs),x1=Math.max(...xs),y0=Math.min(...ys),y1=Math.max(...ys);
+  const W=260,H=124,pad=18, sc=Math.min((W-pad*2)/Math.max(x1-x0,1e-4),(H-pad*2)/Math.max(y1-y0,1e-4));
+  const ox=(W-(x1-x0)*sc)/2, oy=(H-(y1-y0)*sc)/2;
+  const P=s=>[ox+(s[2]*k-x0)*sc, oy+(-s[1]-y0)*sc];
+  const pts=a.map(P), hp=hull(pts);
+  const cx=pts.reduce((m,q)=>m+q[0],0)/pts.length, cy=pts.reduce((m,q)=>m+q[1],0)/pts.length;
+  const padded=hp.map(([x,y])=>{const dx=x-cx,dy=y-cy,d=Math.hypot(dx,dy)||1;return[x+dx/d*9,y+dy/d*9];});
+  const mapSvg=`<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Peta kecil Zon ${z}: ${v} daripada ${t} sekolah dilawati"><polygon points="${padded.map(q=>q.map(n=>n.toFixed(1)).join(',')).join(' ')}" fill="color-mix(in srgb,var(--z${z}) 10%,#fff)" stroke="var(--z${z})" stroke-width="1.2" stroke-dasharray="4 3" stroke-linejoin="round"/>${a.map((s,i)=>{const[x,y]=pts[i];return s.v?`<rect x="${(x-4.5).toFixed(1)}" y="${(y-4.5).toFixed(1)}" width="9" height="9" fill="var(--z${z})" stroke="#fff" stroke-width="1.2"><title>${s[3]} · dilawati</title></rect>`:`<rect x="${(x-3.5).toFixed(1)}" y="${(y-3.5).toFixed(1)}" width="7" height="7" fill="#fff" stroke="var(--z${z})" stroke-width="1.5"><title>${s[3]} · belum</title></rect>`}).join('')}</svg>`;
+  let days=''; for(let d=1;d<=30;d++){const c=(V[d]||[]).filter(x=>x===z).length;days+=d>23?'<i class="f"></i>':`<i class="${c>1?'two':c?'on':''}"></i>`;}
+  const sess=Object.values(V).flat().filter(x=>x===z).length;
+  deck.insertAdjacentHTML('beforeend',`<a class="card" href="#" style="--c:var(--z${z});animation-delay:${z*50}ms"><div class="card-in">
+    <div class="ch"><span class="zb">ZON ${z}</span>${tag}</div>
+    <div class="cnum"><b>${v}<small>/${t}</small></b><div class="pc"><strong>${p}%</strong><span class="mono">dilawati</span></div></div>
+    <div class="mini">${mapSvg}<span class="nth">U ↑</span></div>
+    <div class="days"><div class="row">${days}</div><div class="cap mono"><span>${sess} sesi</span><span>1 — 30 Sep</span></div></div>
+    <div class="cf"><span>Terakhir · ${LAST[z]} Sep</span><span class="mono">${t-v} belum</span></div>
+  </div></a>`);
+}
+// titik karusel (telefon)
+const dots=document.getElementById('dots'); dots.innerHTML=Array.from({length:8},(_,i)=>`<i class="${i?'':'on'}"></i>`).join('');
+deck.addEventListener('scroll',()=>{const c=deck.children[0];if(!c)return;const i=Math.round(deck.scrollLeft/(c.offsetWidth+10));[...dots.children].forEach((d,j)=>d.classList.toggle('on',j===i));},{passive:true});
+</script>
+</body>
+</html>

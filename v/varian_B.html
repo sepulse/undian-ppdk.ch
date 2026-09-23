@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PPDK.CH — Varian B</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* ARAH C "PETA UKUR" — lembaran juruukur. Kertas sejuk, dakwat biru laut,
+   grid halus & bingkai koordinat. Tandatangan: 83 sekolah di koordinat sebenar,
+   wilayah zon sebagai kawasan, disambung dengan senarai lawatan (hover = sorot). */
+:root{
+  --paper:#EDF1F1; --sheet:#F7F9F8; --ink:#13233A; --ink-2:#3C4B5E; --muted:#6B7888; --rule:#D3DBDD; --rule-2:#B9C4C8; --grid:rgba(19,35,58,.06);
+  --isd:#DC2626;
+  --z1:#2563EB; --z2:#16A34A; --z3:#F59E0B; --z4:#8B5CF6; --z5:#EC4899; --z6:#06B6D4; --z7:#D97706; --z8:#475569;
+  --display:"Archivo",system-ui,sans-serif; --sans:"IBM Plex Sans",system-ui,sans-serif; --mono:"IBM Plex Mono",ui-monospace,monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--paper);color:var(--ink);font:15px/1.5 var(--sans);-webkit-font-smoothing:antialiased}
+a{color:inherit;text-decoration:none}
+button{font:inherit;cursor:pointer;background:none;border:0;color:inherit}
+:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
+.mono{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase}
+
+/* ---------- REL IKON ---------- */
+.app{display:grid;grid-template-columns:68px 1fr;min-height:100vh}
+.rail{position:sticky;top:0;height:100vh;background:var(--ink);color:#fff;display:flex;flex-direction:column;align-items:center;padding:16px 0;gap:4px}
+.rail .logo{width:40px;height:40px;background:#fff;color:var(--ink);display:grid;place-items:center;font:900 12px/1 var(--display);font-stretch:115%;margin-bottom:18px;letter-spacing:-.02em}
+.rail a{position:relative;width:44px;height:44px;display:grid;place-items:center;color:rgba(255,255,255,.55)}
+.rail a svg{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:1.7}
+.rail a:hover,.rail a.on{color:#fff;background:rgba(255,255,255,.08)}
+.rail a.on::before{content:"";position:absolute;left:-12px;top:10px;bottom:10px;width:3px;background:#fff}
+.rail a span{position:absolute;left:54px;top:50%;transform:translateY(-50%);background:var(--ink);color:#fff;font:500 12px/1 var(--sans);padding:8px 10px;white-space:nowrap;opacity:0;pointer-events:none;transition:opacity .15s;z-index:9}
+.rail a:hover span,.rail a:focus-visible span{opacity:1}
+.rail .end{margin-top:auto}
+.dock{display:none}
+
+/* ---------- SUSUN ATUR ---------- */
+.page{min-width:0;padding:22px 28px 32px}
+.head{display:flex;justify-content:space-between;align-items:center;padding-bottom:14px;border-bottom:1px solid var(--rule-2)}
+.head .l{display:flex;align-items:baseline;gap:14px}
+.head .brand{font:800 18px/1 var(--display);font-stretch:112%;letter-spacing:-.01em}
+.head .mono{color:var(--muted)}
+.head .sim{display:flex;align-items:center;gap:8px}
+.head .sim i{width:8px;height:8px;background:var(--z3)}
+.split{display:grid;grid-template-columns:minmax(360px,440px) minmax(0,1fr);gap:0 28px;margin-top:22px;align-items:start}
+
+/* kolum kiri */
+.info{display:flex;flex-direction:column;gap:0}
+.eyebrow{color:var(--muted)}
+.info h1{margin-top:10px;font:700 34px/1.05 var(--display);font-stretch:95%;letter-spacing:-.02em}
+.count{margin-top:22px;display:flex;align-items:flex-end;gap:10px;padding-bottom:18px;border-bottom:1px solid var(--rule-2)}
+.count .n{font:800 128px/.78 var(--display);font-stretch:70%;letter-spacing:-.03em}
+.count .of{font:400 44px/1 var(--display);font-stretch:70%;color:var(--muted);padding-bottom:4px}
+.count .pc{margin-left:auto;text-align:right;padding-bottom:4px}
+.count .pc b{display:block;font:700 30px/1 var(--display);font-stretch:85%}
+.count .pc span{color:var(--muted)}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);border-bottom:1px solid var(--rule-2)}
+.stats div{padding:14px 0}
+.stats div + div{padding-left:14px;border-left:1px solid var(--rule)}
+.stats b{display:flex;align-items:center;gap:8px;font:700 28px/1 var(--display);font-stretch:80%}
+.stats span{display:block;margin-top:6px;color:var(--muted)}
+.isd{font:700 10px/1 var(--sans);letter-spacing:.04em;color:#fff;background:var(--isd);padding:4px 6px}
+.cta{display:grid;grid-template-columns:1fr;gap:8px;margin-top:18px}
+.btn{display:flex;justify-content:space-between;align-items:center;height:50px;padding:0 18px;font-weight:600;border:1.5px solid var(--ink);transition:background .15s,color .15s}
+.btn svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:2;transition:transform .2s}
+.btn:hover svg{transform:translateX(4px)}
+.btn-ink{background:var(--ink);color:#fff}
+.btn-ink:hover{background:#1F3452}
+.btn-line:hover{background:var(--sheet)}
+.recent{margin-top:26px}
+.recent h2{display:flex;justify-content:space-between;align-items:baseline;font:700 13px/1 var(--sans);letter-spacing:.06em;text-transform:uppercase;padding-bottom:10px;border-bottom:1px solid var(--ink)}
+.recent h2 a{font-size:12px;letter-spacing:0;text-transform:none;border-bottom:1px solid var(--ink)}
+.rv{display:grid;grid-template-columns:48px 1fr auto;gap:12px;align-items:start;padding:14px 8px 14px 0;border-bottom:1px solid var(--rule);cursor:default;transition:background .15s,padding .15s}
+.rv:hover,.rv.hot{background:var(--sheet);padding-left:8px}
+.rv .d{font:700 26px/.9 var(--display);font-stretch:80%}
+.rv .d small{display:block;font:500 10px/1 var(--mono);letter-spacing:.1em;color:var(--muted);margin-top:5px}
+.rv h3{font-size:14px;font-weight:700;text-transform:uppercase;letter-spacing:.01em}
+.rv p{font-size:13px;color:var(--ink-2);margin-top:3px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.zb{display:inline-flex;align-items:center;height:22px;padding:0 7px;font:700 10.5px/1 var(--sans);letter-spacing:.04em;color:#fff;background:var(--c);white-space:nowrap}
+
+/* kolum peta */
+.sheet{position:sticky;top:22px;background:var(--sheet);border:1px solid var(--rule-2)}
+.sheet-h{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:12px 14px;border-bottom:1px solid var(--rule)}
+.sheet-h b{font:700 13px/1 var(--sans);letter-spacing:.06em;text-transform:uppercase}
+.chips{display:flex;gap:4px;flex-wrap:wrap;justify-content:flex-end}
+.chip{height:28px;min-width:30px;padding:0 8px;font:600 11px/1 var(--mono);border:1px solid var(--rule-2);color:var(--ink-2);display:inline-flex;align-items:center;gap:6px}
+.chip i{width:8px;height:8px;background:var(--c)}
+.chip:hover{border-color:var(--ink)}
+.chip[aria-pressed="true"]{background:var(--ink);color:#fff;border-color:var(--ink)}
+.map-wrap{position:relative;padding:22px 26px 22px 40px;background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);background-size:32px 32px}
+#map{display:block;width:100%;height:auto;max-height:calc(100vh - 210px);overflow:visible}
+#map .hull{transition:opacity .25s}
+#map .s{transition:opacity .25s}
+#map .dim{opacity:.12}
+#map .tick{font:500 10px/1 var(--mono);fill:var(--muted);letter-spacing:.04em}
+#map .zl{font:700 10px/1 var(--sans);letter-spacing:.04em}
+.tip{position:absolute;pointer-events:none;background:var(--ink);color:#fff;padding:8px 10px;font-size:12px;line-height:1.35;transform:translate(-50%,calc(-100% - 12px));opacity:0;transition:opacity .12s;white-space:nowrap;z-index:4}
+.tip b{display:block;font-size:12.5px}
+.tip span{font:500 10px/1 var(--mono);letter-spacing:.06em;color:rgba(255,255,255,.7)}
+.sheet-f{display:flex;justify-content:space-between;align-items:center;gap:16px;padding:10px 14px;border-top:1px solid var(--rule);color:var(--muted)}
+.lg{display:flex;gap:16px}
+.lg span{display:inline-flex;align-items:center;gap:6px}
+.lg i{width:10px;height:10px;display:inline-block}
+@keyframes ping{0%{transform:scale(1);opacity:.9}100%{transform:scale(3.2);opacity:0}}
+.ping{transform-box:fill-box;transform-origin:center;animation:ping 1.8s ease-out infinite}
+
+/* pintasan */
+.tiles{display:grid;grid-template-columns:repeat(4,1fr);gap:0;margin-top:28px;border:1px solid var(--rule-2);background:var(--sheet)}
+.tile{display:grid;grid-template-columns:auto 1fr auto;gap:12px;align-items:center;padding:18px;border-right:1px solid var(--rule);transition:background .15s,color .15s}
+.tile:last-child{border-right:0}
+.tile .k{font:800 26px/1 var(--display);font-stretch:70%;color:var(--muted)}
+.tile b{font-size:14px}
+.tile small{display:block;font-size:12.5px;color:var(--muted);font-weight:400}
+.tile svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:1.8}
+.tile:hover{background:var(--ink);color:#fff}
+.tile:hover small,.tile:hover .k{color:rgba(255,255,255,.65)}
+.foot{display:flex;justify-content:space-between;margin-top:22px;color:var(--muted)}
+
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+
+/* ---------- RESPONSIF ---------- */
+@media (max-width:1100px){
+  .split{grid-template-columns:1fr}
+  .sheet{position:relative;top:0;order:2}
+  .info{display:contents}
+  .info > *{order:1}
+  .info > .recent{order:3}
+  .sheet{margin:6px 0 0}
+  #map{max-height:none}
+  #map .tick{font-size:15px}
+  .tiles{grid-template-columns:1fr 1fr}
+  .tile:nth-child(2){border-right:0}
+  .tile:nth-child(-n+2){border-bottom:1px solid var(--rule)}
+}
+@media (max-width:760px){
+  .app{grid-template-columns:1fr}
+  .rail{display:none}
+  .page{padding:14px 16px 96px}
+  .head .hide-s{display:none}
+  .sheet-h{flex-direction:column;align-items:flex-start}
+  .chips{justify-content:flex-start}
+  .map-wrap{padding:14px 12px 14px 30px;background-size:24px 24px}
+  .sheet-f{flex-direction:column;align-items:flex-start;gap:6px}
+  .info h1{font-size:28px}
+  .count .n{font-size:104px}
+  .tiles{grid-template-columns:1fr}
+  .tile{border-right:0;border-bottom:1px solid var(--rule)}
+  .tile:last-child{border-bottom:0}
+  .foot{flex-direction:column;gap:6px}
+  .dock{display:grid;grid-template-columns:repeat(5,1fr);position:fixed;left:0;right:0;bottom:0;background:var(--ink);color:#fff;z-index:10;padding-bottom:env(safe-area-inset-bottom)}
+  .dock a{display:flex;flex-direction:column;align-items:center;gap:4px;padding:10px 0 9px;font:500 10px/1 var(--mono);letter-spacing:.04em;text-transform:uppercase;color:rgba(255,255,255,.6)}
+  .dock a.on{color:#fff;box-shadow:inset 0 3px 0 #fff}
+  .dock svg{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:1.7}
+}
+</style>
+</head>
+<body>
+<div class="app">
+  <nav class="rail" aria-label="Utama">
+    <div class="logo">PPDK</div>
+    <a class="on" href="#" aria-label="Home"><svg viewBox="0 0 24 24"><path d="M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6h-6v6H4a1 1 0 0 1-1-1z"/></svg><span>Home</span></a>
+    <a href="#" aria-label="Borang PTIS"><svg viewBox="0 0 24 24"><path d="M14 3H6v18h12V7z"/><path d="M14 3v4h4M9 12h6M9 16h6"/></svg><span>Borang PTIS</span></a>
+    <a href="#" aria-label="Dashboard"><svg viewBox="0 0 24 24"><path d="M4 4h7v7H4zM13 4h7v7h-7zM4 13h7v7H4zM13 13h7v7h-7z"/></svg><span>Dashboard</span></a>
+    <a href="#" aria-label="Analitik Zon"><svg viewBox="0 0 24 24"><path d="M5 20V10M12 20V4M19 20v-7"/></svg><span>Analitik Zon</span></a>
+    <a href="#" aria-label="Ahli JTK"><svg viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0M16 4.5a3.5 3.5 0 0 1 0 7M18 14a6 6 0 0 1 3.5 6"/></svg><span>Ahli JTK</span></a>
+    <a href="#" aria-label="Isu dan Tujuan"><svg viewBox="0 0 24 24"><path d="M12 3l10 18H2z"/><path d="M12 10v5M12 18h.01"/></svg><span>Isu &amp; Tujuan</span></a>
+    <a href="#" aria-label="Rekod Lawatan"><svg viewBox="0 0 24 24"><path d="M5 3h14v18H5z"/><path d="M9 8h6M9 12h6M9 16h3"/></svg><span>Rekod Lawatan</span></a>
+    <a href="#" aria-label="Peta dan Radar"><svg viewBox="0 0 24 24"><path d="M9 4L3 6v14l6-2 6 2 6-2V4l-6 2z"/><path d="M9 4v14M15 6v14"/></svg><span>Peta &amp; Radar</span></a>
+    <a href="#" aria-label="Laporan Rasmi"><svg viewBox="0 0 24 24"><path d="M3 4h18v12H3z"/><path d="M8 20h8M12 16v4M7 12l3-3 2 2 4-4"/></svg><span>Laporan Rasmi</span></a>
+    <a href="#" aria-label="QR dan Short URL"><svg viewBox="0 0 24 24"><path d="M4 4h6v6H4zM14 4h6v6h-6zM4 14h6v6H4zM14 14h2v2h-2zM18 18h2v2h-2zM14 18h2v2h-2zM18 14h2v2h-2z"/></svg><span>QR &amp; Short URL</span></a>
+    <a class="end" href="#" aria-label="Login Admin"><svg viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="10"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg><span>Login Admin</span></a>
+  </nav>
+
+  <div class="page">
+    <header class="head">
+      <div class="l"><span class="brand">PPDK.CH</span><span class="mono hide-s">Unit ICT · PPD Kuching</span></div>
+      <div class="mono sim"><i></i><span>Data simulasi</span><span class="hide-s">· 23.09.2026</span></div>
+    </header>
+
+    <div class="split">
+      <section class="info" aria-labelledby="h1">
+        <span class="eyebrow mono">Lembaran liputan · September 2026</span>
+        <h1 id="h1">Di mana kita sudah sampai bulan ini.</h1>
+        <div class="count"><span class="n">21</span><span class="of">/83</span><span class="pc"><b>25%</b><span class="mono">sekolah dilawati</span></span></div>
+        <div class="stats">
+          <div><b>30</b><span class="mono">Sesi bantu</span></div>
+          <div><b>37</b><span class="mono">Pegawai</span></div>
+          <div><b>14 <em class="isd">ISD</em></b><span class="mono">Tiket</span></div>
+        </div>
+        <div class="cta">
+          <a class="btn btn-ink" href="#">Cipta Laporan Lawatan <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+          <a class="btn btn-line" href="#">Buka Analisis JTK <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+        </div>
+        <div class="recent">
+          <h2>Lawatan terkini <a href="#">Semua rekod</a></h2>
+          <article class="rv" data-s="SMK ST TERESA"><div class="d">18<small>SEP</small></div><div><h3>SMK St Teresa</h3><p>Memastikan tiada masalah capaian talian internet di sekolah bagi menyokong kelancaran sesi PdP.</p></div><span class="zb" style="--c:var(--z5)">ZON 5</span></article>
+          <article class="rv" data-s="SK RAMPANGI"><div class="d">17<small>SEP</small></div><div><h3>SK Rampangi</h3><p>Pemasangan antivirus pada unit komputer riba bagi memastikan keselamatan data terpelihara.</p></div><span class="zb" style="--c:var(--z2)">ZON 2</span></article>
+          <article class="rv" data-s="SK MERPATI JEPANG"><div class="d">17<small>SEP</small></div><div><h3>SK Merpati Jepang</h3><p>Pemeriksaan talian internet dan Access Point; membaiki kabel selepas projek tingkap.</p></div><span class="zb" style="--c:var(--z6)">ZON 6</span></article>
+        </div>
+      </section>
+
+      <section class="sheet" aria-labelledby="mh">
+        <div class="sheet-h">
+          <b id="mh">Peta 83 sekolah</b>
+          <div class="chips" id="chips" role="group" aria-label="Tapis zon"></div>
+        </div>
+        <div class="map-wrap">
+          <svg id="map" role="img" aria-label="Peta kedudukan 83 sekolah mengikut zon; petak berisi menandakan sekolah dilawati"></svg>
+          <div class="tip" id="tip"></div>
+        </div>
+        <div class="sheet-f mono">
+          <div class="lg"><span><i style="background:var(--ink)"></i>Dilawati</span><span><i style="border:1.5px solid var(--ink)"></i>Belum</span><span><i style="background:var(--z5);outline:2px solid color-mix(in srgb,var(--z5) 35%,transparent);outline-offset:2px"></i>Terkini</span></div>
+          <span id="sel">Semua zon · 21/83</span>
+        </div>
+      </section>
+    </div>
+
+    <nav class="tiles" aria-label="Pintasan">
+      <a class="tile" href="#"><span class="k">01</span><span><b>Kod QR &amp; Short URL</b><small>Pautan ppdk.ch/slug</small></span><svg viewBox="0 0 24 24"><path d="M7 17L17 7M8 7h9v9"/></svg></a>
+      <a class="tile" href="#"><span class="k">02</span><span><b>Pasang aplikasi</b><small>PWA, sokong luar talian</small></span><svg viewBox="0 0 24 24"><path d="M7 17L17 7M8 7h9v9"/></svg></a>
+      <a class="tile" href="#"><span class="k">03</span><span><b>Radar 83 Sekolah</b><small>Peta interaktif penuh</small></span><svg viewBox="0 0 24 24"><path d="M7 17L17 7M8 7h9v9"/></svg></a>
+      <a class="tile" href="#"><span class="k">04</span><span><b>Laporan Rasmi</b><small>Hantaran &amp; cetakan</small></span><svg viewBox="0 0 24 24"><path d="M7 17L17 7M8 7h9v9"/></svg></a>
+    </nav>
+    <footer class="foot mono"><span>© 2026 Sektor Pengurusan Maklumat &amp; ICT, PPD Kuching</span><span>Sistem PTIS · PPD Kuching</span></footer>
+  </div>
+
+  <nav class="dock" aria-label="Navigasi telefon">
+    <a class="on" href="#"><svg viewBox="0 0 24 24"><path d="M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6h-6v6H4a1 1 0 0 1-1-1z"/></svg>Home</a>
+    <a href="#"><svg viewBox="0 0 24 24"><path d="M14 3H6v18h12V7z"/><path d="M14 3v4h4M9 12h6M9 16h6"/></svg>PTIS</a>
+    <a href="#"><svg viewBox="0 0 24 24"><path d="M4 4h7v7H4zM13 4h7v7h-7zM4 13h7v7H4zM13 13h7v7h-7z"/></svg>Dash</a>
+    <a href="#"><svg viewBox="0 0 24 24"><path d="M9 4L3 6v14l6-2 6 2 6-2V4l-6 2z"/><path d="M9 4v14M15 6v14"/></svg>Peta</a>
+    <a href="#"><svg viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></svg>Menu</a>
+  </nav>
+</div>
+
+<script>
+const S=[[1,1.6749,110.4609,"SJKC CHUNG HUA SUNGAI BUDA"],[1,1.6635,110.4262,"SK BAKO"],[1,1.6348,110.4582,"SK GOEBILT"],[1,1.6213,110.4498,"SK KPG SENARI"],[1,1.648,110.4825,"SK MUARA TEBAS"],[1,1.5948,110.4364,"SK PAJAR SEJINGKAT"],[1,1.6449,110.4475,"SMK BAKO"],[2,1.7012,110.3697,"SJKC CHUNG HUA BUNTAL"],[2,1.6386,110.3378,"SK BANDAR SAMARIANG"],[2,1.7001,110.3707,"SK BUNTAL"],[2,1.6971,110.3109,"SK PASIR PANDAK"],[2,1.6553,110.3324,"SK RAMPANGI"],[2,1.6663,110.295,"SK SALAK"],[2,1.7204,110.316,"SK SANTUBONG"],[2,1.6325,110.3284,"SMK BANDAR SAMARIANG"],[2,1.7241,110.3194,"SMK SANTUBONG"],[3,1.5708,110.3417,"SK ENCIK BUYONG"],[3,1.5611,110.3508,"SK GERSIK"],[3,1.5638,110.3189,"SK GITA"],[3,1.5599,110.3778,"SK MATU BARU"],[3,1.5607,110.3651,"SK PULO"],[3,1.5723,110.3329,"SK RAKYAT TUPONG"],[3,1.5715,110.3347,"SK RPR JALAN ASTANA"],[3,1.5647,110.3175,"SK TAN SRI SULAIMAN DAUD"],[3,1.5653,110.3196,"SMK PETRA JAYA"],[3,1.5615,110.3171,"SMK TUNKU ABDUL RAHMAN"],[4,1.5781,110.3533,"KOLEJ DATUK PATINGGI ABANG HAJI ABDILLAH"],[4,1.5801,110.3596,"SK ASTANA"],[4,1.617,110.3409,"SK AGAMA DATUK HAJI ABDUL KADIR HASSAN"],[4,1.5809,110.3102,"SK PENDIDIKAN KHAS KUCHING"],[4,1.6022,110.3265,"SK SEMARIANG"],[4,1.5826,110.3173,"SK SEMERAH PADI"],[4,1.5991,110.3414,"SK SIOL KANAN"],[4,1.6197,110.3397,"SMK AGAMA TUN AHMAD ZAIDI"],[4,1.5864,110.3692,"SMK DEMAK BARU"],[4,1.5806,110.318,"SMK SEMERAH PADI"],[4,1.5713,110.3635,"SMK TUN ABANG HAJI OPENG"],[5,1.5515,110.3477,"SJKC CHUNG HUA NO 1"],[5,1.5519,110.3617,"SJKC CHUNG HUA NO 3"],[5,1.5552,110.3546,"SK SONG KHENG HAI"],[5,1.5559,110.3474,"SK ST MARY"],[5,1.551,110.3434,"SK ST TERESA"],[5,1.5549,110.3465,"SK ST THOMAS"],[5,1.5473,110.3604,"SK LUMBA KUDA"],[5,1.5483,110.362,"SMK PADUNGAN"],[5,1.5557,110.3469,"SMK ST MARY"],[5,1.5515,110.3426,"SMK ST TERESA"],[5,1.5548,110.3453,"SMK ST THOMAS"],[5,1.5546,110.3494,"SMK TINGGI KUCHING"],[6,1.5487,110.3366,"SJKC CHUNG HUA NO 4"],[6,1.5365,110.3402,"SJKC ST PAUL"],[6,1.5327,110.3465,"SK BATU LINTANG"],[6,1.5368,110.3382,"SK CATHOLIC ENGLISH"],[6,1.5484,110.3239,"SK COMBINED"],[6,1.542,110.3346,"SK GREEN ROAD"],[6,1.5631,110.3318,"SK MERPATI JEPANG"],[6,1.5542,110.3312,"SK RAKYAT BOLHASSAN"],[6,1.5324,110.348,"SMK BATU LINTANG"],[6,1.5443,110.3346,"SMK GREEN ROAD"],[6,1.5513,110.3406,"SMK ST JOSEPH"],[7,1.5437,110.3616,"SJKC CHUNG HUA NO 5"],[7,1.5129,110.353,"SJKC STAMPIN KUCHING"],[7,1.5268,110.3448,"SK JALAN ONG TIANG SWEE"],[7,1.5375,110.3666,"SK KENYALANG"],[7,1.5172,110.3456,"SK LAKSAMANA"],[7,1.4724,110.3389,"SK MEJAR GENERAL DATO IBRAHIM KUCHING"],[7,1.5099,110.3658,"SK SATRIA JAYA"],[7,1.5109,110.3694,"SK SUNGAI STUTONG"],[7,1.5252,110.3667,"SK TABUAN JAYA"],[7,1.5408,110.3597,"SMK BANDAR KUCHING NO 1"],[7,1.5172,110.3514,"SMK DPHA GAPOR"],[8,1.5701,110.3826,"SJKC BINTAWA"],[8,1.508,110.3865,"SJKC CHUNG HUA NO 2"],[8,1.5519,110.3807,"SJKC CHUNG HUA PENDING"],[8,1.5445,110.383,"SJKC SUNGAI APONG"],[8,1.5488,110.3977,"SK MUHIBBAH"],[8,1.5452,110.3812,"SK ST ANDREW"],[8,1.5351,110.3905,"SK TABUAN"],[8,1.537,110.3858,"SK TABUAN HILIR"],[8,1.539,110.3705,"SK TABUAN ULU"],[8,1.5478,110.3831,"SMK PENDING KUCHING"],[8,1.5362,110.3918,"SMK SERI SETIA"],[8,1.5134,110.3851,"SMK TABUAN JAYA"]]; // [zon, lat, lng, nama] — dari radar.html
+const VISITS={1:3,2:2,3:1,4:6,5:3,6:1,7:1,8:4};
+const FORCE=['SMK ST TERESA','SK RAMPANGI','SK MERPATI JEPANG'];
+const LATEST='SMK ST TERESA';
+// tanda sekolah dilawati (data simulasi): paksa sekolah dalam senarai terkini, kemudian isi ikut urutan
+const byZ={}; S.forEach(s=>(byZ[s[0]]=byZ[s[0]]||[]).push(s));
+Object.entries(byZ).forEach(([z,arr])=>{let n=VISITS[z];arr.forEach(s=>{if(FORCE.includes(s[3])){s.v=1;n--;}});arr.forEach(s=>{if(!s.v&&n>0){s.v=1;n--;}});});
+
+const svg=document.getElementById('map'), NS='http://www.w3.org/2000/svg';
+const lat0=1.46,lat1=1.735,lng0=110.285,lng1=110.495, k=Math.cos(1.6*Math.PI/180);
+const W=560, H=Math.round(W*(lat1-lat0)/((lng1-lng0)*k));
+svg.setAttribute('viewBox',`0 0 ${W} ${H}`);
+const X=g=>(g-lng0)/(lng1-lng0)*W, Y=l=>(lat1-l)/(lat1-lat0)*H;
+const el=(t,a,p=svg)=>{const e=document.createElementNS(NS,t);for(const q in a)e.setAttribute(q,a[q]);p.appendChild(e);return e;};
+
+// bingkai koordinat
+el('rect',{x:0,y:0,width:W,height:H,fill:'none',stroke:'var(--rule-2)'});
+for(let g=110.30;g<=110.49;g+=0.05){const x=X(g);el('line',{x1:x,y1:H,x2:x,y2:H+6,stroke:'var(--muted)'});el('text',{x:x,y:H+18,'text-anchor':'middle',class:'tick'}).textContent=g.toFixed(2)+'°T';}
+for(let l=1.50;l<=1.72;l+=0.05){const y=Y(l);el('line',{x1:-8,y1:y,x2:0,y2:y,stroke:'var(--muted)'});el('text',{x:-12,y:y+3,'text-anchor':'end',class:'tick'}).textContent=l.toFixed(2)+'°U';}
+// anak panah utara
+const na=el('g',{transform:`translate(${W-26},34)`});
+el('path',{d:'M0 -18 L7 5 L0 0 L-7 5 Z',fill:'var(--ink)'},na); el('text',{x:0,y:19,'text-anchor':'middle',class:'tick',style:'font-size:12px;fill:var(--ink);font-weight:600'},na).textContent='U';
+
+// wilayah zon (hull cembung)
+function hull(p){p=p.slice().sort((a,b)=>a[0]-b[0]||a[1]-b[1]);const c=(o,a,b)=>(a[0]-o[0])*(b[1]-o[1])-(a[1]-o[1])*(b[0]-o[0]);const lo=[],up=[];for(const q of p){while(lo.length>1&&c(lo[lo.length-2],lo[lo.length-1],q)<=0)lo.pop();lo.push(q);}for(const q of p.reverse()){while(up.length>1&&c(up[up.length-2],up[up.length-1],q)<=0)up.pop();up.push(q);}return lo.slice(0,-1).concat(up.slice(0,-1));}
+function pad(pts,r){const cx=pts.reduce((a,p)=>a+p[0],0)/pts.length,cy=pts.reduce((a,p)=>a+p[1],0)/pts.length;return pts.map(([x,y])=>{const dx=x-cx,dy=y-cy,d=Math.hypot(dx,dy)||1;return[x+dx/d*r,y+dy/d*r];});}
+const placed=[]; const hullG=el('g',{}), dotG=el('g',{}), lblG=el('g',{});
+Object.entries(byZ).forEach(([z,arr])=>{
+  const pts=pad(hull(arr.map(s=>[X(s[2]),Y(s[1])])),18);
+  el('polygon',{points:pts.map(p=>p.join(',')).join(' '),fill:`color-mix(in srgb, var(--z${z}) 9%, transparent)`,stroke:`var(--z${z})`,'stroke-width':1.2,'stroke-dasharray':'5 4','stroke-linejoin':'round',class:'hull','data-z':z},hullG);
+  const cx=arr.reduce((a,s)=>a+X(s[2]),0)/arr.length; let cy=Math.min(...arr.map(s=>Y(s[1])))-20; while(placed.some(p=>Math.abs(p[0]-cx)<48&&Math.abs(p[1]-cy)<19)) cy-=19; placed.push([cx,cy]);
+  const g=el('g',{class:'hull','data-z':z,transform:`translate(${cx},${cy})`},lblG);
+  el('rect',{x:-22,y:-9,width:44,height:17,fill:`var(--z${z})`},g);
+  el('text',{x:0,y:3.5,'text-anchor':'middle',class:'zl',fill:'#fff'},g).textContent='ZON '+z;
+});
+const tip=document.getElementById('tip'), wrap=svg.parentNode;
+S.forEach(s=>{
+  const x=X(s[2]),y=Y(s[1]),z=s[0],r=s.v?5:4.5;
+  const g=el('g',{class:'s','data-z':z,'data-n':s[3],tabindex:0,role:'img','aria-label':`${s[3]}, Zon ${z}, ${s.v?'dilawati':'belum dilawati'}`},dotG);
+  if(s[3]===LATEST) el('rect',{x:x-r,y:y-r,width:r*2,height:r*2,fill:`var(--z${z})`,class:'ping'},g);
+  el('rect',{x:x-r,y:y-r,width:r*2,height:r*2,fill:s.v?`var(--z${z})`:'var(--sheet)',stroke:s.v?'#fff':`var(--z${z})`,'stroke-width':s.v?1.2:1.6},g);
+  const show=()=>{const b=svg.getBoundingClientRect(),w=wrap.getBoundingClientRect(),sc=b.width/W;tip.style.left=(b.left-w.left+x*sc)+'px';tip.style.top=(b.top-w.top+(y-r)*sc)+'px';tip.innerHTML=`<b>${s[3]}</b><span>ZON ${z} · ${s.v?'DILAWATI':'BELUM DILAWATI'}</span>`;tip.style.opacity=1;};
+  g.addEventListener('mouseenter',show);g.addEventListener('focus',show);
+  g.addEventListener('mouseleave',()=>tip.style.opacity=0);g.addEventListener('blur',()=>tip.style.opacity=0);
+});
+
+// tapis zon
+const chips=document.getElementById('chips'), sel=document.getElementById('sel');
+const total=z=>z?byZ[z].length:83, vis=z=>z?VISITS[z]:21;
+function filt(z){
+  chips.querySelectorAll('.chip').forEach(c=>c.setAttribute('aria-pressed',String(c.dataset.z===String(z||''))));
+  svg.querySelectorAll('[data-z]').forEach(e=>e.classList.toggle('dim',!!z&&e.dataset.z!==String(z)));
+  sel.textContent=(z?'Zon '+z:'Semua zon')+' · '+vis(z)+'/'+total(z);
+}
+chips.insertAdjacentHTML('beforeend',`<button class="chip" data-z="" aria-pressed="true">Semua</button>`);
+for(let z=1;z<=8;z++) chips.insertAdjacentHTML('beforeend',`<button class="chip" data-z="${z}" style="--c:var(--z${z})" aria-pressed="false"><i></i>${z}</button>`);
+chips.addEventListener('click',e=>{const c=e.target.closest('.chip');if(c)filt(c.dataset.z?+c.dataset.z:0);});
+
+// senarai terkini <-> peta
+document.querySelectorAll('.rv').forEach(r=>{
+  const g=svg.querySelector(`[data-n="${r.dataset.s}"]`);
+  r.addEventListener('mouseenter',()=>{g&&g.dispatchEvent(new Event('mouseenter'));});
+  r.addEventListener('mouseleave',()=>{tip.style.opacity=0;});
+});
+</script>
+</body>
+</html>
