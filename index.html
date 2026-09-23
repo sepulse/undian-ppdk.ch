@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>PPDK.CH — Undian Reka Bentuk Home</title>
-<meta name="description" content="Tujuh varian reka bentuk halaman utama PPDK.CH. Lihat setiap satu dan undi pilihan anda.">
+<meta name="description" content="Lapan varian reka bentuk halaman utama PPDK.CH. Lihat setiap satu dan undi pilihan anda.">
 <meta name="robots" content="noindex">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -49,10 +49,10 @@ svg.i{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:1.8;stro
 .nav-btn:hover{background:var(--bg);color:var(--ink)}
 .opts{flex:1;display:flex;overflow-x:auto;scrollbar-width:none;scroll-snap-type:x proximity}
 .opts::-webkit-scrollbar{display:none}
-.opt{flex:1 0 176px;scroll-snap-align:start;display:grid;grid-template-columns:auto 1fr;gap:4px 12px;align-items:center;text-align:left;padding:12px 16px;border-right:1px solid var(--rule);position:relative;transition:background .15s}
+.opt{flex:1 0 150px;scroll-snap-align:start;display:grid;grid-template-columns:auto 1fr;gap:4px 12px;align-items:center;text-align:left;padding:12px 16px;border-right:1px solid var(--rule);position:relative;transition:background .15s}
 .opt:last-child{border-right:0}
 .opt:hover{background:#F7F7F4}
-.opt .no{grid-row:1/3;width:34px;height:34px;display:grid;place-items:center;font:800 17px/1 var(--display);font-stretch:85%;background:var(--bg);color:var(--ink)}
+.opt .no{grid-row:1/3;min-width:34px;padding:0 6px;height:34px;display:grid;place-items:center;font:800 17px/1 var(--display);font-stretch:85%;background:var(--bg);color:var(--ink)}
 .opt b{font-size:14px;white-space:nowrap}
 .opt .sw{display:flex;gap:2px}
 .opt .sw i{width:14px;height:6px}
@@ -94,7 +94,7 @@ dialog::backdrop{background:rgba(21,25,28,.55)}
 .dlg p{margin-top:8px;color:var(--ink-2);font-size:14px}
 .pick{margin-top:16px;display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:6px}
 .pick button{display:flex;align-items:center;gap:10px;padding:10px;border:1px solid var(--rule);text-align:left;font-size:13.5px;font-weight:600}
-.pick button span{width:26px;height:26px;display:grid;place-items:center;background:var(--bg);font:800 14px/1 var(--display)}
+.pick button span{min-width:26px;padding:0 5px;height:26px;display:grid;place-items:center;background:var(--bg);font:800 14px/1 var(--display)}
 .pick button[aria-pressed="true"]{border-color:var(--ink);box-shadow:inset 0 0 0 1px var(--ink)}
 .pick button[aria-pressed="true"] span{background:var(--ink);color:#fff}
 .dlg .act{margin-top:18px;display:flex;justify-content:flex-end;gap:8px}
@@ -133,7 +133,7 @@ dialog::backdrop{background:rgba(21,25,28,.55)}
 <header class="top">
   <span class="brand">PPDK.CH</span>
   <span class="sep"></span>
-  <div class="t"><b>Undian reka bentuk halaman utama</b><span class="mono">Varian A – G · pilih satu</span></div>
+  <div class="t"><b>Undian reka bentuk halaman utama</b><span class="mono">Varian A – G + A-1 · pilih satu</span></div>
   <div class="tools">
     <div class="seg" role="group" aria-label="Saiz paparan">
       <button id="bDesk" aria-pressed="true"><svg class="i"><use href="#i-desk"/></svg>Desktop</button>
@@ -189,6 +189,9 @@ const OPTS = [
   { no:'A', file:'v/varian_A.html', name:'Varian A', sw:['#F2F0EA','#0A2B2F','#8FE0D3'],
     desc:'Pusat kawalan yang tenang: panel petrol gelap dengan matriks 83 petak — setiap sekolah satu petak.',
     tags:['Cerah + panel gelap','Sidebar','Matriks sekolah'] },
+  { no:'A-1', file:'v/varian_A-1.html', name:'Varian A-1', sw:['#F2F0EA','#0A2B2F','#8FE0D3'],
+    desc:'Varian A dengan kategori aduan berikon, ikon kategori pada lawatan terkini dan ikon pada pintasan.',
+    tags:['Cerah + panel gelap','Sidebar','Kategori aduan'] },
   { no:'B', file:'v/varian_B.html', name:'Varian B', sw:['#EDF1F1','#13233A','#F7F9F8'],
     desc:'Lembaran juruukur: 83 sekolah di koordinat sebenar, wilayah zon dilukis, tapis zon & sorot sekolah.',
     tags:['Cerah','Rel ikon','Peta geografi'] },
